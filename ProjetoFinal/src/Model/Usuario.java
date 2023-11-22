@@ -2,7 +2,7 @@ package Model;
 
 import java.time.LocalDate;
 
-import Model.Pessoa.TipoMembro;
+import Model.Usuario.TipoMembro;
 
 public class Usuario {
 	private String nome;
