@@ -2,14 +2,14 @@ package Model;
 import java.util.Date;
 
 public class Pacote implements Reservavel {
-	private String destino;
+	private Destino destino;
     private Date dataPartida;
     private int duracao; // em dias
     private double preco;
     private int assentosDisponiveis;
 
     // Construtor
-    public Pacote(String destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis) {
+    public Pacote(Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis) {
         this.destino = destino;
         this.dataPartida = dataPartida;
         this.duracao = duracao;
@@ -19,11 +19,11 @@ public class Pacote implements Reservavel {
 
     // Métodos getters e setters
 
-    public String getDestino() {
+    public Destino getDestino() {
         return destino;
     }
 
-    public void setDestino(String destino) {
+    public void setDestino(Destino destino) {
         this.destino = destino;
     }
 

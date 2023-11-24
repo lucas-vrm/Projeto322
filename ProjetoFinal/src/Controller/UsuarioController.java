@@ -11,7 +11,6 @@ public class UsuarioController {
 	public UsuarioController(Usuario model, UsuarioView view) {
 		this.model = model;
 		this.view = view;
-		
 	}
 	
 	public void setDetalhesDaPessoa(String nome, String contato, int id, TipoMembro tipoDeMembro) {
