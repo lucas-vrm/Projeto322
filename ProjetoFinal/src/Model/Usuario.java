@@ -1,6 +1,7 @@
 package Model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import Model.Usuario.TipoMembro;
 
@@ -9,6 +10,8 @@ public class Usuario {
 	private String contato;
 	private String email;
 	private int id;
+	private ArrayList<Destino> destinos;
+	private double creditos;
 	private LocalDate dataDeRegistro;
 	private TipoMembro tipoDeMembro;
 	
@@ -21,8 +24,10 @@ public class Usuario {
 	public Usuario(String nome, String contato, String email, int id, TipoMembro tipoDeMembro) {
 		this.nome = nome;
 		this.contato = contato;
-		this.setEmail(email);
+		this.email = email;
 		this.id = id;
+		this.destinos = new ArrayList<Destino>();
+		this.creditos = 0.0;
 		LocalDate dataDeRegistro = LocalDate.now();
 		this.tipoDeMembro = tipoDeMembro;
 	}
