@@ -1,7 +1,6 @@
 package Model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 abstract class Usuario {
 	private String nome;
@@ -9,7 +8,7 @@ abstract class Usuario {
 	private String email;
 	private int id;
 	private LocalDate dataDeRegistro;
-	private boolean logado
+	private boolean logado;
 	
 	/*Metodo construtor*/
 	public Usuario(String nome, String contato, String email, int id) {

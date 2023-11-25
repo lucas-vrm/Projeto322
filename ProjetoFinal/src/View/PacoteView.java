@@ -1,7 +1,5 @@
 package View;
 import Model.Pacote;
-import Model.Destino;
-import Model.CategoriaDeDestino;
 
 public class PacoteView {
     // Vamos exibir algumas informações simples sobre um determinado pacote de viagem

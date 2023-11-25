@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.HashSet;
 
 
 public class Cliente extends Usuario {
@@ -18,12 +20,16 @@ public class Cliente extends Usuario {
 	}
 
 	// Método para adicionar um pacote de viagem comprado pelo cliente.
-	public void comprarPacoteViagem(Pacote pacote){
-		if (creditos >= pacote.getPreco){
-			System.out.println("O pacote de viagem foi comprado com sucesso!");
-			pacotesComprados.add(pacote);
-			double creditoAtualizado = creditos - pacote.getPreco;
-			this.creditos = creditoAtualizado;
+	public void comprarPacoteViagem(Pacote pacote, int quantidadeAssentos){
+		if (creditos >= pacote.getPreco()){
+			// Para checarmos se ainda temos assentos disponíveis
+			boolean reservou = pacote.reservar(quantidadeAssentos);
+			if (reservou){
+				System.out.println("O pacote de viagem foi comprado com sucesso!");
+				pacotesComprados.add(pacote);
+				double creditoAtualizado = creditos - pacote.getPreco();
+				this.creditos = creditoAtualizado;
+			}
 		}
 		else {
 			System.out.println("Você não possui créditos suficientes para comprar este pacote.");
@@ -38,11 +44,14 @@ public class Cliente extends Usuario {
 	}
 
 	// Método para visualizarmos os pacotes de viagem por destino
-	public List<Pacote> visualizarPorDestino(){
-		return pacotesComprados.stream()
-			.filter(p -> p.getDestino().equalsIgnoreCase(destino))
-			.collect(Collectors.toList());
+	public Set<Destino> visualizarDestinosPacotesComprados(){
+		Set<Destino> destinos = new HashSet<>();
+
+		for (Pacote pacote : pacotesComprados) {
+			destinos.add(pacote.getDestino());
+		}
+
+		return destinos;
 	}
-	
 
 }
