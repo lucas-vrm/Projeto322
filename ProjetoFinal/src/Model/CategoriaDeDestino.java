@@ -18,4 +18,12 @@ public enum CategoriaDeDestino {
     public String getDescricao() {
         return descricao;
     }
+
+    public static void main(String[] args) {
+        CategoriaDeDestino[] categorias = CategoriaDeDestino.values();
+
+        for (CategoriaDeDestino categoria : categorias) {
+            System.out.println(categoria.getDescricao());
+        }
+    }
 }
