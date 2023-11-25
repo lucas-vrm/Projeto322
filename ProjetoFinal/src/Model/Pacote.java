@@ -7,14 +7,16 @@ public class Pacote implements Reservavel {
     private int duracao; // em dias
     private double preco;
     private int assentosDisponiveis;
+    private CategoriaDeDestino categoria;
 
     // Construtor
-    public Pacote(Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis) {
+    public Pacote(Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, CategoriaDeDestino categoria) {
         this.destino = destino;
         this.dataPartida = dataPartida;
         this.duracao = duracao;
         this.preco = preco;
         this.assentosDisponiveis = assentosDisponiveis;
+        this.categoria = categoria;
     }
 
     // Métodos getters e setters
@@ -57,6 +59,14 @@ public class Pacote implements Reservavel {
 
     public void setAssentosDisponiveis(int assentosDisponiveis) {
         this.assentosDisponiveis = assentosDisponiveis;
+    }
+
+    public CategoriaDeDestino getCategoriaDeDestino(){
+        return categoria;
+    }
+
+    public void setCategoriaDeDestino(CategoriaDeDestino categoria){
+        this.categoria = categoria;
     }
     
     @Override
