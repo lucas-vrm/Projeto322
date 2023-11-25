@@ -9,6 +9,7 @@ abstract class Usuario {
 	private String email;
 	private int id;
 	private LocalDate dataDeRegistro;
+	private boolean logado
 	
 	/*Metodo construtor*/
 	public Usuario(String nome, String contato, String email, int id) {
@@ -16,6 +17,7 @@ abstract class Usuario {
 		this.contato = contato;
 		this.email = email;
 		this.id = id;
+		this.logado = false; // Por padrão, iniciamos o usuário como não-logado
 		LocalDate dataDeRegistro = LocalDate.now();
 	}
 	
@@ -54,6 +56,20 @@ abstract class Usuario {
 
 	public void setDataDeRegistro(LocalDate dataDeRegistro) {
 		this.dataDeRegistro = dataDeRegistro;
+	}
+
+	public void fazerLogin(){
+		this.logado = true;
+		System.out.println("Seja bem vindo, " + nome + "!");
+	}
+
+	public void fazerLogout(){
+		this.logado = false;
+		System.out.println("Usuário " + nome + " deslogado com sucesso!");
+	}
+
+	public boolean estaLogado(){
+		return logado;
 	}
 
 }
