@@ -1,6 +1,10 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class Cliente extends Usuario {
 	
@@ -25,5 +29,20 @@ public class Cliente extends Usuario {
 			System.out.println("Você não possui créditos suficientes para comprar este pacote.");
 		}
 	}
+
+	// Método para visualizarmos os pacotes de viagem por data
+	public List<Pacote> visualizarPorData(){
+		return pacotesComprados.stream()
+			.sorted(Comparator.comparing(Pacote::getDataPartida))
+			.collect(Collectors.toList());
+	}
+
+	// Método para visualizarmos os pacotes de viagem por destino
+	public List<Pacote> visualizarPorDestino(){
+		return pacotesComprados.stream()
+			.filter(p -> p.getDestino().equalsIgnoreCase(destino))
+			.collect(Collectors.toList());
+	}
+	
 
 }
