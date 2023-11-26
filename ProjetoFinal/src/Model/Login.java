@@ -3,7 +3,9 @@ package Model;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 
 import Resources.LoginMethods;
@@ -14,7 +16,7 @@ public class Login implements LoginMethods {
     static RepositorioCliente repCliente = new RepositorioCliente();
     static RepositorioAdmin repAdmin = new RepositorioAdmin();
 
-    public static void loginScreen(String[] args) {
+    public static Usuario loginScreen(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("---- Plataforma Turistando ----");
             System.out.println();
@@ -30,29 +32,27 @@ public class Login implements LoginMethods {
                 scanner.nextLine(); // Limpar o buffer
             } catch (Exception e) {
                 System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
-                loginScreen(args);
-                return;
+                return loginScreen(args);
             }
 
             switch (opcao) {
                 case 1:
-                    fazerLogin(scanner);
-                    break;
+                    return fazerLogin(scanner);
                 case 2:
-                    fazerCadastro(scanner);
-                    break;
+                    return fazerCadastro(scanner);
                 case 3:
                     System.out.println("Saindo da plataforma");
-                    return;
+                    return null;
                 default:
                     System.out.println();
                     System.out.println("Opção inválida. Tente novamente.");
                     loginScreen(args);
             }
         }
+        return null;
     }
 
-    public static void fazerLogin(Scanner scanner) {
+    public static Usuario fazerLogin(Scanner scanner) {
         System.out.println();
         System.out.println("=== Tela de Login ===");
         System.out.println();
@@ -62,21 +62,23 @@ public class Login implements LoginMethods {
         System.out.print("Digite a senha: ");
         String senha = scanner.nextLine();
 
-        String nome = procurarAdmin(email, senha);
-        if (nome != null) {
-            System.out.println("Login bem-sucedido! Bem-vindo, Admin " + nome + "!");
+        Map<String, String> usuario = procurarAdmin(email, senha);
+        if (usuario != null) {
+            System.out.println("Login bem-sucedido! Bem-vindo, Admin " + usuario.get("nome") + "!");
+            return repAdmin.criarAdminComMap(usuario);
         } else {
-            nome = procurarUsuario(email, senha);
-            if (nome != null) {
-                System.out.println("Login bem-sucedido! Bem-vindo, Cliente " + nome + "!");
+            usuario = procurarUsuario(email, senha);
+            if (usuario != null) {
+                System.out.println("Login bem-sucedido! Bem-vindo, Cliente " + usuario.get("nome") + "!");
+                return repCliente.criarClienteComMap(usuario);
             } else {
                 System.out.println("Usuário ou senha incorretos. Tente novamente.");
-                fazerLogin(scanner);
+                return fazerLogin(scanner);
             }
         }
     }
 
-    public static void fazerCadastro(Scanner scanner) {
+    public static Cliente fazerCadastro(Scanner scanner) {
         System.out.println();
         System.out.println();
         System.out.println("=== Tela de Cadastro ===");
@@ -121,6 +123,7 @@ public class Login implements LoginMethods {
         Cliente novoCliente = new Cliente(nome, contato, email, senha, id);
         addClient(repCliente, novoCliente);
         System.out.println("Cadastro realizado com sucesso!");
+        return novoCliente;
     }
 
     private static void addClient(RepositorioCliente repCliente2, Cliente novoCliente) {
@@ -131,12 +134,12 @@ public class Login implements LoginMethods {
         }
     }
 
-    private static String procurarAdmin(String email, String senha) {
+    private static Map<String, String> procurarAdmin(String email, String senha) {
         String[] headernames = repAdmin.getHeaderNames();
         int email_column = repAdmin.getDriver().attributeColumn("email", headernames);
         int password_column = repAdmin.getDriver().attributeColumn("senha", headernames);
-        int name_column = repAdmin.getDriver().attributeColumn("nome", headernames);
         ArrayList<ArrayList<String>> items = null;
+        Map<String, String> usuario = new HashMap<>();
         
         try {
             items = repAdmin.pullAllItems();
@@ -147,18 +150,23 @@ public class Login implements LoginMethods {
 
         for (ArrayList<String> item : items) {
             if (item.get(email_column).equals(email) && item.get(password_column).equals(senha)) {
-                return item.get(name_column);
+                int i = 0;
+                for(String headername : headernames) {
+                    usuario.put(headername, item.get(i));
+                    i++;
+                }
+                return usuario;
             }
         }
         return null;
     }
 
-    private static String procurarUsuario(String email, String senha) {
+    private static Map<String, String> procurarUsuario(String email, String senha) {
         String[] headernames = repCliente.getHeaderNames();
         int email_column = repCliente.getDriver().attributeColumn("email", headernames);
         int password_column = repCliente.getDriver().attributeColumn("senha", headernames);
-        int name_column = repCliente.getDriver().attributeColumn("nome", headernames);
         ArrayList<ArrayList<String>> items = null;
+        Map<String, String> usuario = new HashMap<>();
         
         try {
             items = repCliente.pullAllItems();
@@ -169,10 +177,14 @@ public class Login implements LoginMethods {
 
         for (ArrayList<String> item : items) {
             if (item.get(email_column).equals(email) && item.get(password_column).equals(senha)) {
-                return item.get(name_column);
+                int i = 0;
+                for(String headername : headernames) {
+                    usuario.put(headername, item.get(i));
+                    i++;
+                }
+                return usuario;
             }
         }
         return null;
     }
-
 }
