@@ -12,4 +12,20 @@ public class PacoteController {
 		this.view = view;
 		
 	}
+
+	public Pacote getModel(){
+		return model;
+	}
+
+	public void setModel(Pacote model){
+		this.model = model;
+	}
+
+	public PacoteView getView(){
+		return view;
+	}
+
+	public void setView(PacoteView view){
+		this.view = view;
+	}
 }

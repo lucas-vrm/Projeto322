@@ -12,4 +12,20 @@ public class DestinoController {
 		this.view = view;
 		
 	}
+
+	public Destino getModel(){
+		return model;
+	}
+
+	public void setModel(Destino model){
+		this.model = model;
+	}
+
+	public DestinoView getView(){
+		return view;
+	}
+
+	public void setView(DestinoView view){
+		this.view = view;
+	}
 }
