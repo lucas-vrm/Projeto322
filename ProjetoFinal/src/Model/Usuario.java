@@ -1,22 +1,23 @@
 package Model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 abstract class Usuario {
 	private String nome;
 	private String contato;
 	private String email;
+	private String senha;
 	private int id;
 	private LocalDate dataDeRegistro;
 	
 	/*Metodo construtor*/
-	public Usuario(String nome, String contato, String email, int id) {
+	public Usuario(String nome, String contato, String email, String senha, int id) {
 		this.nome = nome;
 		this.contato = contato;
 		this.email = email;
+		this.senha = senha;
 		this.id = id;
-		LocalDate dataDeRegistro = LocalDate.now();
+		this.dataDeRegistro = LocalDate.now();
 	}
 	
 	/*Metodos getters e setters*/
@@ -42,6 +43,14 @@ abstract class Usuario {
 		this.email = email;
 	}
 
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	
 	public int getId() {
 		return id;
 	}

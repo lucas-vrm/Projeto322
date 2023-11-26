@@ -1,38 +1,27 @@
 package Resources;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-
+import java.util.*;
 
 public class Driver {
     public Driver() {
     }
 
-    private int indiceHeader(String headerName, String headerNames[]) {
+    private int indexOfHeader(String headerName, String headerNames[]) {
         for (int i = 0; i < headerNames.length; i++) {
-            if (headerNames[i] == headerName) {
+            if (headerNames[i].equals(headerName)) {
                 return i;
             }
         }
         System.out.println("Header " + headerName + " not found");
+        System.exit(1);
         return 0;
     }
 
-    private Object[] emptyCsvOutput(String headerNames[], int headerLenght) {
-        Object[] csvOutput = new Object[headerLenght];
-        for(int i = 0; i < headerLenght; i++) {
+    private Object[] emptyCsvOutput(String headerNames[], int headerLength) {
+        Object[] csvOutput = new Object[headerLength];
+        for (int i = 0; i < headerLength; i++) {
             csvOutput[i] = "empty";
         }
         return csvOutput;
@@ -46,141 +35,158 @@ public class Driver {
     private static List<?> convertObjectToList(Object obj) {
         List<?> list = new ArrayList<>();
         if (obj.getClass().isArray()) {
-            list = Arrays.asList((Object[])obj);
+            list = Arrays.asList((Object[]) obj);
         } else if (obj instanceof Collection) {
-            list = new ArrayList<>((Collection<?>)obj);
+            list = new ArrayList<>((Collection<?>) obj);
         }
         return list;
     }
 
     private String listToSingleString(Object inputObject) {
         List<?> inputList = convertObjectToList(inputObject);
-        
-        String output = "";
+
+        StringBuilder output = new StringBuilder();
         int listSize = inputList.size();
-        for(int i = 0; i < listSize - 1; i++) {
-            output += Objects.toString(inputList.get(i), null) + "|";
+        if (listSize == 0) {
+            return "empty";
+        } else {
+            for (int i = 0; i < listSize - 1; i++) {
+                output.append(Objects.toString(inputList.get(i), null)).append("|");
+            }
+            output.append(inputList.get(listSize - 1)).append(",");
+            return output.toString();
         }
-        output += inputList.get(listSize-1) + ",";
-        return output;
-        
     }
 
     private Object[] getObjectAttributeValues(Object objeto, String headerNames[]) {
-        Object[] atributeValues = emptyCsvOutput(headerNames, headerNames.length);
+        Object[] attributeValues = emptyCsvOutput(headerNames, headerNames.length);
 
-        Class<?> classeAtual = objeto.getClass();
-        atributeValues[0] = getObjectClassName(classeAtual.getName());
-        
-        while (classeAtual != null) {
-            Field[] atributos = classeAtual.getDeclaredFields();
-            for (Field atributo : atributos) {
+        Class<?> currentClass = objeto.getClass();
+        attributeValues[0] = getObjectClassName(currentClass.getName());
+
+        while (currentClass != null) {
+            Field[] attributes = currentClass.getDeclaredFields();
+            for (Field attribute : attributes) {
                 try {
-                    atributo.setAccessible(true);
-                    Object value = atributo.get(objeto);
+                    attribute.setAccessible(true);
+                    Object value = attribute.get(objeto);
 
-                    String attributeName = atributo.getName();
-                    String attributeType = atributo.getType().getName();
-                    if ( attributeType == "java.util.ArrayList" && value != null) {
-                        atributeValues[indiceHeader(attributeName, headerNames)] = listToSingleString(value);
+                    String attributeName = attribute.getName();
+                    String attributeType = attribute.getType().getName();
+                    if ("java.util.ArrayList".equals(attributeType) && value != null) {
+                        attributeValues[indexOfHeader(attributeName, headerNames)] = listToSingleString(value);
                     } else {
-                        atributeValues[indiceHeader(attributeName, headerNames)] = value;
+                        attributeValues[indexOfHeader(attributeName, headerNames)] = value;
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }
-            classeAtual = classeAtual.getSuperclass();
+            currentClass = currentClass.getSuperclass();
         }
-        return atributeValues;
+        return attributeValues;
     }
 
-    private void writeLine(Object[] csvOutput, PrintWriter out) {
-        int headerLenght = csvOutput.length;
-        for(int i = 0; i < headerLenght - 1; i++) {
-            out.write(csvOutput[i] + ",");
+    private String[] getObjectAttributeNames(Object objeto) throws IllegalAccessException {
+        ArrayList<String> headerNames = new ArrayList<>();
+
+        Class<?> currentClass = objeto.getClass();
+
+        while (currentClass != null) {
+            Field[] attributes = currentClass.getDeclaredFields();
+            for (Field attribute : attributes) {
+                attribute.setAccessible(true);
+                headerNames.add(attribute.getName());
+            }
+            currentClass = currentClass.getSuperclass();
         }
-        out.write(csvOutput[headerLenght-1] + "\n");
+
+        // Convertendo para array de String
+        return headerNames.toArray(new String[0]);
     }
-    
-    private void writeLine(ArrayList<String> csvOutput, PrintWriter out) {
-        int headerLenght = csvOutput.size();
-        for(int i = 0; i < headerLenght - 1; i++) {
-            out.write(csvOutput.get(i) + ",");
+
+    private void writeLine(List<?> csvOutput, PrintWriter out) {
+        int headerLength = csvOutput.size();
+        for (int i = 0; i < headerLength - 1; i++) {
+            out.write(Objects.toString(csvOutput.get(i), null) + ",");
         }
-        out.write(csvOutput.get(headerLenght-1) + "\n");
+        out.write(Objects.toString(csvOutput.get(headerLength - 1), null) + "\n");
+    }
+
+    public String[] getObjectHeaderNames(Object objeto) throws IllegalAccessException {
+        return getObjectAttributeNames(objeto);
     }
 
     public void writeHeaderOnly(String pathname, String[] headerNames) throws FileNotFoundException {
-        PrintWriter out = new PrintWriter(new File(pathname));
-        writeLine(headerNames, out);
-        out.close();
-    }
-
-    public void addObject(Object objeto, String pathname, String[] headerNames) throws FileNotFoundException{
-        try(FileWriter fw = new FileWriter(pathname, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        PrintWriter out = new PrintWriter(bw))
-        {
-            Object[] csvOutput = getObjectAttributeValues(objeto, headerNames);
-            writeLine(csvOutput, out);
-            out.close();
-        } catch (IOException e) {
-            //Write Exception Handling
+        try (PrintWriter out = new PrintWriter(new File(pathname))) {
+            writeLine(Arrays.asList(headerNames), out);
         }
     }
 
-    public void addMultipleObject(ArrayList<Object> objetos, String pathname, String[] headerNames) throws FileNotFoundException{
-        try(FileWriter fw = new FileWriter(pathname, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        PrintWriter out = new PrintWriter(bw))
-        {
+    public void addObject(Object objeto, String pathname, String[] headerNames) throws FileNotFoundException {
+        try (FileWriter fw = new FileWriter(pathname, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            Object[] csvOutput = getObjectAttributeValues(objeto, headerNames);
+            writeLine(Arrays.asList(csvOutput), out);
+        } catch (IOException e) {
+            //Write Exception Handling
+            e.printStackTrace();
+        }
+    }
+
+    public void addMultipleObject(ArrayList<Object> objetos, String pathname, String[] headerNames) throws FileNotFoundException {
+        try (FileWriter fw = new FileWriter(pathname, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
             for (Object objeto : objetos) {
                 Object[] csvOutput = getObjectAttributeValues(objeto, headerNames);
-                writeLine(csvOutput, out);
+                writeLine(Arrays.asList(csvOutput), out);
             }
-            out.close();
         } catch (IOException e) {
             //Write Exception Handling
+            e.printStackTrace();
         }
     }
 
-    public void addString(ArrayList<String> csvRow, String pathname, String[] headerNames) throws FileNotFoundException{
-        try(FileWriter fw = new FileWriter(pathname, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        PrintWriter out = new PrintWriter(bw))
-        {
+    public void addString(ArrayList<String> csvRow, String pathname, String[] headerNames) throws FileNotFoundException {
+        try (FileWriter fw = new FileWriter(pathname, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
             writeLine(csvRow, out);
-            out.close();
         } catch (IOException e) {
             //exception handling left as an exercise for the reader
+            e.printStackTrace();
         }
     }
 
-    public void addMultipleString(ArrayList<ArrayList<String>> csvMultipleRow, String pathname, String[] headerNames) throws FileNotFoundException{
-        try(FileWriter fw = new FileWriter(pathname, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        PrintWriter out = new PrintWriter(bw))
-        {
+    public void addMultipleString(ArrayList<ArrayList<String>> csvMultipleRow, String pathname, String[] headerNames) throws FileNotFoundException {
+        try (FileWriter fw = new FileWriter(pathname, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
             for (ArrayList<String> csvRow : csvMultipleRow) {
                 writeLine(csvRow, out);
             }
-            out.close();
         } catch (IOException e) {
             //exception handling left as an exercise for the reader
+            e.printStackTrace();
         }
     }
-    
-    public ArrayList<ArrayList<String>> readItems(String pathname) throws FileNotFoundException, IOException{
+
+    public ArrayList<ArrayList<String>> readItems(String pathname) throws FileNotFoundException, IOException {
         ArrayList<ArrayList<String>> records = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(pathname))) {
-            String line = br.readLine();
+            String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
                 records.add(new ArrayList<>(Arrays.asList(values)));
             }
         }
-        return records; 
+        return records;
+    }
+
+    public int attributeColumn(String headerName, String headerNames[]) {
+        return indexOfHeader(headerName, headerNames);
     }
     
 }
