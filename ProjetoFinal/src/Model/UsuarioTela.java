@@ -3,9 +3,9 @@ package Model;
 import java.util.Scanner;
 
 public class UsuarioTela {
-    public static void UserScreen(String[] args, Cliente cliente){
+    public static void UserScreen(Cliente cliente){
         try(Scanner scanner = new Scanner(System.in)){
-            System.out.println("---- Janela do Usuário ----");
+            System.out.println("---- Janela do Cliente ----");
             System.out.println();
             System.out.println("1. Visualizar Informações");
             System.out.println("2. Adicionar Crédito");
@@ -23,29 +23,27 @@ public class UsuarioTela {
             } catch (Exception e) {
                 System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
                 scanner.close();
-                UserScreen(args, cliente);
+                UserScreen(cliente);
                 return;
             }
 
             switch (opcao) {
                 case 1:
                     mostrarInfo(cliente);
-                    System.out.println("jjaj");
                     break;
                 case 2:
-                    // chamada do método para add crédito 
-                    System.out.println("lalal");
+                    addCredito(cliente);
                     break;
                 case 3:
-                    System.out.println("Saindo da plataforma");
-                    return;
+                    mostrarCredito(cliente);
+                    break;
                 case 4:
                     System.out.println("Saindo da plataforma");
                     break;
                 default:
                     System.out.println();
                     System.out.println("Opção inválida. Tente novamente.");
-                    UserScreen(args, cliente);
+                    UserScreen(cliente);
             }
         }
     }
@@ -71,6 +69,28 @@ public class UsuarioTela {
     }
 
     public static void addCredito(Cliente cliente) {
-        
+        Scanner entrada = new Scanner(System.in);
+        try {
+            System.out.println("Digite o valor que você deseja adicionar:");
+            double valor = entrada.nextDouble();
+            double creditoAntigo = cliente.getCreditos();
+            cliente.setCreditos(creditoAntigo + valor);
+            entrada.nextLine(); // Limpar o buffer
+            System.out.println("Crédito adicionado com sucesso!!!");
+        } catch (Exception e) {
+            System.out.println("Erro: Certifique-se de inserir um valor de crédito válido.");
+            entrada.close();
+            addCredito(cliente);
+            return;
+        }
+        entrada.close();
+    }
+    public static void mostrarCredito(Cliente cliente) {
+        System.out.println();
+        System.out.println();
+        System.out.println("=== Créditos do Cliente ===");
+        System.out.println();
+        System.out.println("Saldo de Créditos atual: " + cliente.getCreditos());
+        System.out.println();
     }
 }
