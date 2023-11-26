@@ -3,7 +3,7 @@ package Model;
 import java.util.Scanner;
 
 public class UsuarioTela {
-    public static void UserScreen(Cliente cliente){
+    public static void userScreen(Cliente cliente){
         try(Scanner scanner = new Scanner(System.in)){
             System.out.println("---- Janela do Cliente ----");
             System.out.println();
@@ -15,7 +15,7 @@ public class UsuarioTela {
             System.out.print("Escolha uma opção: ");
 
 
-            //scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine(); // Limpar o buffer
             int opcao;
             try {
                 opcao = scanner.nextInt();
@@ -23,7 +23,7 @@ public class UsuarioTela {
             } catch (Exception e) {
                 System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
                 scanner.close();
-                UserScreen(cliente);
+                userScreen(cliente);
                 return;
             }
 
@@ -43,7 +43,7 @@ public class UsuarioTela {
                 default:
                     System.out.println();
                     System.out.println("Opção inválida. Tente novamente.");
-                    UserScreen(cliente);
+                    userScreen(cliente);
             }
         }
     }

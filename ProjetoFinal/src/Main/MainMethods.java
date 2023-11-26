@@ -10,7 +10,7 @@ public class MainMethods {
         return classeUsuario.substring(classeUsuario.lastIndexOf(".") + 1);
     }
 
-    public static void controleDeTelas(String[] args, Object user) {
+    public static void controleDeTelas(Object user) {
         if (user != null) {
 			String tipoDeUsuario = MainMethods.identificarTipoUsuario(user);
 			switch (tipoDeUsuario) {
@@ -18,7 +18,7 @@ public class MainMethods {
 					Cliente cliente = (Cliente) user;
 					System.out.println("---- Tela Cliente " + cliente.getNome() + " ----");
 					// Chamar tela do Cliente
-                    UsuarioTela.UserScreen(cliente);
+                    UsuarioTela.userScreen(cliente);
                     break;
 				
                 case "Administrador":

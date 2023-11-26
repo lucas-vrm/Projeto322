@@ -16,7 +16,7 @@ public class Login implements LoginMethods {
     static RepositorioCliente repCliente = new RepositorioCliente();
     static RepositorioAdmin repAdmin = new RepositorioAdmin();
 
-    public static Usuario loginScreen(String[] args) {
+    public static Usuario loginScreen() {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("---- Plataforma Turistando ----");
             System.out.println();
@@ -32,7 +32,7 @@ public class Login implements LoginMethods {
                 scanner.nextLine(); // Limpar o buffer
             } catch (Exception e) {
                 System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
-                return loginScreen(args);
+                return loginScreen();
             }
 
             switch (opcao) {
@@ -46,7 +46,7 @@ public class Login implements LoginMethods {
                 default:
                     System.out.println();
                     System.out.println("Opção inválida. Tente novamente.");
-                    loginScreen(args);
+                    loginScreen();
             }
         }
         return null;
@@ -65,11 +65,13 @@ public class Login implements LoginMethods {
         Map<String, String> usuario = procurarAdmin(email, senha);
         if (usuario != null) {
             System.out.println("Login bem-sucedido! Bem-vindo, Admin " + usuario.get("nome") + "!");
+            scanner.close();
             return repAdmin.criarAdminComMap(usuario);
         } else {
             usuario = procurarUsuario(email, senha);
             if (usuario != null) {
                 System.out.println("Login bem-sucedido! Bem-vindo, Cliente " + usuario.get("nome") + "!");
+                scanner.close();
                 return repCliente.criarClienteComMap(usuario);
             } else {
                 System.out.println("Usuário ou senha incorretos. Tente novamente.");
