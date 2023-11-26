@@ -65,8 +65,19 @@ public class Cliente extends Usuario {
 		for (Pacote pacote : pacotesComprados) {
 			destinos.add(pacote.getDestino());
 		}
-
 		return destinos;
+	}
+
+	// Método para verificarmos a quantidade de créditos do cliente.
+	public void verificarCreditos(){
+		System.out.println("Você possui R$ " + creditos + " em créditos.");
+	}
+
+	// Método para adicionarmos créditos ao cliente.
+	public void adicionarCreditos(double creditosAdicionados){
+		double creditosAtualizados = this.creditos + creditosAdicionados;
+		this.creditos = creditosAtualizados;
+		System.out.println("Seus créditos adicionados com sucesso!");
 	}
 	
 }
