@@ -1,9 +1,12 @@
 package Main;
 
+import Model.Login;
+
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// Login telaDeLogin = new Login();
+		Login.loginScreen(args);
 
 	}
 
