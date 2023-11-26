@@ -1,9 +1,11 @@
-package Model;
+package Resources;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PacoteRepository {
+import Model.Pacote;
+
+public class RepositorioPacote {
     private List<Pacote> pacotes = new ArrayList<>();
 
     public void adicionarPacote(Pacote pacote) {
