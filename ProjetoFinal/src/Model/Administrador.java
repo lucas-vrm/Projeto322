@@ -42,7 +42,7 @@ public class Administrador extends Usuario {
 			//Abre o escritor para adicionar dados ao arquivo
 			FileWriter escritor = new FileWriter(arquivo, StandardCharsets.ISO_8859_1, arquivoExiste);
 			if (!arquivoExiste) {
-                escritor.write("Nome;Nota;Assistido\n");
+                escritor.write("Destino;PartidaDuracao;Preço;AssentosDisponiveis\n");
             }
 			
 			//Escrever os dados do pacote de viagem
@@ -63,6 +63,47 @@ public class Administrador extends Usuario {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void apagaPacote(Pacote pacote) {
+		try {
+            FileReader fileReader = new FileReader(arquivo);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            List<String> linhas = new ArrayList<>();
+            String linhaAtual;
+
+            while ((linhaAtual = bufferedReader.readLine()) != null) {
+                linhas.add(linhaAtual);
+            }
+
+            bufferedReader.close();
+
+            FileWriter fileWriter = new FileWriter(arquivo);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            boolean encontrado = false;
+
+            for (String linha : linhas) {
+                String[] dados = linha.split(",");
+                if (dados.length > 0 && !dados[0].equals(pacote)) {
+                    // Se o destino nao for o que queremos apagar, escrevemos no arquivo
+                    bufferedWriter.write(linha);
+                    bufferedWriter.newLine();
+                } else {
+                    encontrado = true;
+                }
+            }
+
+            bufferedWriter.close();
+
+            if (!encontrado) {
+                System.out.println("Pacote de viagem não encontrado.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 	}
 	
 	// Método para listar os Pacotes do arquivo CSV
