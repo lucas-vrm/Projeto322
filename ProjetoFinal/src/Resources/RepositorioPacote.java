@@ -44,4 +44,16 @@ public class RepositorioPacote extends Repositorio {
     public Pacote getPacoteByName(String nomePacote) {
         return criarPacoteComMap(getObjectMapByAttribute("nome", nomePacote));
     }
+
+    public ArrayList<Pacote> getAllPacotesFromSameAttribute(String nomeAtributo, String valorAtributo) {
+        ArrayList<Map<String, String>> pacotesMaps = new ArrayList<>();
+        ArrayList<Pacote> pacotesObjetos = new ArrayList<>();
+
+        pacotesMaps = getAllObjectsMapBySameAttribute(nomeAtributo, valorAtributo);
+        for(Map<String, String> pacote : pacotesMaps) {
+            Pacote tempPacote = criarPacoteComMap(pacote);
+            pacotesObjetos.add(tempPacote);
+        }
+        return pacotesObjetos;
+    }
 }

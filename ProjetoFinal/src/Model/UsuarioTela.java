@@ -1,6 +1,9 @@
 package Model;
 
 import java.util.Scanner;
+
+import Resources.RepositorioPacote;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -156,38 +159,29 @@ public class UsuarioTela {
     }
 
     public void buscarPacotePorDestino(String destinoDesejado){
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader(arquivoPacotes));
-            String linhaAtual;
-            System.out.println("=== PACOTES ENCONTRADOS COM O DESTINO " + destinoDesejado + " ====");
+        String linhaAtual;
+        RepositorioPacote repPacote = new RepositorioPacote();
+        Pacote pacote = repPacote.getPacoteByName(destinoDesejado);
+            
+        System.out.println("=== PACOTES ENCONTRADOS COM O DESTINO " + destinoDesejado + " ====");
 
-            while ((linhaAtual = reader.readLine()) != null) {
-                String[] dadosPacote = linhaAtual.split(",");
-                String nomeDestino = dadosPacote[1];
+ 
+        String nome = pacote.getNome();
+        String dataPartida = dadosPacote[2];
+        String duracao = dadosPacote[3];
+        String preco = dadosPacote[4];
+        String assentosDisponiveis = dadosPacote[5];
+        String categoria = dadosPacote[6];
+        String atividadesDisponiveis = dadosPacote[7];
+        System.out.println("Nome: " + nome);
+        System.out.println("Data de partida: " + dataPartida);
+        System.out.println("Duração em dias: " + duracao);
+        System.out.println("Preço: R$ " + preco);
+        System.out.println("Assentos Disponíveis: " + assentosDisponiveis);
+        System.out.println("Categoria: " + categoria);
+        System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
+        System.out.println("");
 
-                // Verificar se o destino atual é o desejado
-                if (nomeDestino.equalsIgnoreCase(destinoDesejado)){ 
-                    String nome = dadosPacote[0];
-                    String dataPartida = dadosPacote[2];
-                    String duracao = dadosPacote[3];
-                    String preco = dadosPacote[4];
-                    String assentosDisponiveis = dadosPacote[5];
-                    String categoria = dadosPacote[6];
-                    String atividadesDisponiveis = dadosPacote[7];
-                    System.out.println("Nome: " + nome);
-                    System.out.println("Data de partida: " + dataPartida);
-                    System.out.println("Duração em dias: " + duracao);
-                    System.out.println("Preço: R$ " + preco);
-                    System.out.println("Assentos Disponíveis: " + assentosDisponiveis);
-                    System.out.println("Categoria: " + categoria);
-                    System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
-                    System.out.println("");
-                }
-            }
-            reader.close();
-        } catch (IOException e){
-            System.out.println("Erro ao ler o arquivo de pacotes de viagem: " + e.getMessage());
-        }
     }
 
     public void buscarPacotePorCategoria(String categoriaDesejada){

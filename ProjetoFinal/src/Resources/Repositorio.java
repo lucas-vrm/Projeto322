@@ -78,6 +78,33 @@ public class Repositorio {
         return null;
     }
 
+    public ArrayList<Map<String, String>> getAllObjectsMapBySameAttribute(String AtributeName, String AttributeValue) {
+        String[] headernames = getHeaderNames();
+        int attribute_column = this.driver.attributeColumn(AtributeName, headernames);
+        ArrayList<Map<String, String>> allObjectMaps = new ArrayList<>();
+        ArrayList<ArrayList<String>> items = null;
+
+        try {
+            items = pullAllItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+        for (ArrayList<String> item : items) {
+            if (item.get(attribute_column).equals(AttributeValue)) {
+                Map<String, String> tempObjectMap = new HashMap<>();
+                int i = 0;
+                for(String headername : headernames) {
+                    tempObjectMap.put(headername, item.get(i));
+                    i++;
+                }
+                allObjectMaps.add(tempObjectMap);
+            }
+        }
+        return allObjectMaps;
+    }
+
     public ArrayList<ArrayList<String>> pullAllItems() throws IOException{    
         return driver.readItems(this.filePathName);
     }
@@ -109,6 +136,18 @@ public class Repositorio {
             target_index += 1;
         }
         return -1;
+    }
+
+    public ArrayList<ArrayList<String>> getItemsByStringValue(String atributo, String value) throws IOException {
+        int column_index = this.driver.attributeColumn(atributo, this.headerNames);
+        ArrayList<ArrayList<String>> items = pullAllItems();
+        ArrayList<ArrayList<String>> output = new ArrayList<>();
+        for (ArrayList<String> item : items) {
+            if (item.get(column_index).equals(value)) {
+                output.add(item);
+            }
+        }
+        return output;
     }
 
     public void removeItemByStringValue(String atributo, String value) throws IOException {

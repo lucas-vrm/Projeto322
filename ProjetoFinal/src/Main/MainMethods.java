@@ -18,7 +18,7 @@ public class MainMethods {
 					Cliente cliente = (Cliente) user;
 					System.out.println("---- Tela Cliente " + cliente.getNome() + " ----");
 					// Chamar tela do Cliente
-                    UsuarioTela.userScreen(cliente);
+                    //UsuarioTela.userScreen(cliente);
                     break;
 				
                 case "Administrador":
