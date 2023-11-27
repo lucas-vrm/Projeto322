@@ -14,7 +14,7 @@ public class Pacote implements Reservavel {
 
     // Construtor
     public Pacote(String nome, Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, 
-                    String categoria, ArrayList<String> atividadesDisponiveis) {
+                    String categoria, ArrayList<String> atividadesDisponiveis2) {
         this.nome = nome;
         this.destino = destino;
         this.dataPartida = dataPartida;
@@ -22,7 +22,7 @@ public class Pacote implements Reservavel {
         this.preco = preco;
         this.assentosDisponiveis = assentosDisponiveis;
         this.categoria = CategoriaDeDestino.fromDescricao(categoria);
-        this.atividadesDisponiveis = atividadesDisponiveis;
+        this.atividadesDisponiveis = atividadesDisponiveis2;
     }
 
     // Métodos getters e setters

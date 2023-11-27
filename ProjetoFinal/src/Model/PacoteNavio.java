@@ -1,14 +1,14 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class PacoteNavio extends Pacote {
     private String companhiaAerea;
     private int quantidadeCabinesDisponiveis;
 
-    public PacoteNavio(Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, String categoria, List<String> atividadesDisponiveis, String companhiaAerea, int quantidadeCabinesDisponiveis) {
-        super(destino,dataPartida,duracao,preco,assentosDisponiveis,categoria,atividadesDisponiveis);
+    public PacoteNavio(String nome, Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, String categoria, ArrayList<String> atividadesDisponiveis, String companhiaAerea, int quantidadeCabinesDisponiveis) {
+        super(nome, destino,dataPartida,duracao,preco,assentosDisponiveis,categoria,atividadesDisponiveis);
         this.companhiaAerea = companhiaAerea;
         this.quantidadeCabinesDisponiveis = quantidadeCabinesDisponiveis;
     }
