@@ -4,35 +4,35 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class PacoteNavio extends Pacote {
-    private String companhiaAerea;
-    private int quantidadeCabinesDisponiveis;
+    private String companhiaNaval;
+    private int cabinesDisponiveis;
 
-    public PacoteNavio(String nome, Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, String categoria, ArrayList<String> atividadesDisponiveis, String companhiaAerea, int quantidadeCabinesDisponiveis) {
+    public PacoteNavio(String nome, Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, String categoria, ArrayList<String> atividadesDisponiveis, String companhiaNaval, int cabinesDisponiveis) {
         super(nome, destino,dataPartida,duracao,preco,assentosDisponiveis,categoria,atividadesDisponiveis);
-        this.companhiaAerea = companhiaAerea;
-        this.quantidadeCabinesDisponiveis = quantidadeCabinesDisponiveis;
+        this.companhiaNaval = companhiaNaval;
+        this.cabinesDisponiveis = cabinesDisponiveis;
     }
 
     public String getCompanhiaNaval() {
-        return companhiaAerea;
+        return companhiaNaval;
     }
 
-    public void setCompanhiaNaval(String companhiaAerea) {
-        this.companhiaAerea = companhiaAerea;
+    public void setCompanhiaNaval(String companhiaNaval) {
+        this.companhiaNaval = companhiaNaval;
     }
 
     public int getQuantidadeCabinesDisponiveis() {
-        return quantidadeCabinesDisponiveis;
+        return cabinesDisponiveis;
     }
 
-    public void setQuantidadeCabinesDisponiveis(int quantidadeCabinesDisponiveis) {
-        this.quantidadeCabinesDisponiveis = quantidadeCabinesDisponiveis;
+    public void setQuantidadeCabinesDisponiveis(int cabinesDisponiveis) {
+        this.cabinesDisponiveis = cabinesDisponiveis;
     }        
 
     @Override
-    public boolean reservar(int quantidadeCabinesRequisitadas) {
-        if (quantidadeCabinesRequisitadas > 0 && quantidadeCabinesRequisitadas <= quantidadeCabinesDisponiveis) {
-            quantidadeCabinesDisponiveis -= quantidadeCabinesRequisitadas;
+    public boolean reservar(int cabinesRequisitadas) {
+        if (cabinesRequisitadas > 0 && cabinesRequisitadas <= cabinesDisponiveis) {
+            cabinesDisponiveis -= cabinesRequisitadas;
             System.out.println("Cabines no navio alugadas!");
             return true;
         } else {
