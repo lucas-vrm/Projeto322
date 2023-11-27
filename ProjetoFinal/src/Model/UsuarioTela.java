@@ -3,13 +3,10 @@ package Model;
 import java.util.Scanner;
 
 import Resources.RepositorioPacote;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class UsuarioTela {
-    private String arquivoPacotes; // Nome do arquivo CSV com os pacotes de viagem
 
     public UsuarioTela(){
     }
@@ -157,96 +154,99 @@ public class UsuarioTela {
         }
     }
 
-    public void buscarPacotePorDestino(String destinoDesejado){
+     public void buscarPacotePorDestino(String destinoDesejado){
         RepositorioPacote repPacote = new RepositorioPacote();
-        Pacote pacote = repPacote.getPacoteByName(destinoDesejado);
-            
-        System.out.println("=== PACOTES ENCONTRADOS COM O DESTINO " + destinoDesejado + " ====");
-        /*
-        String nome = pacote.getNome();
-        String dataPartida = dadosPacote[2];
-        String duracao = dadosPacote[3];
-        String preco = dadosPacote[4];
-        String assentosDisponiveis = dadosPacote[5];
-        String categoria = dadosPacote[6];
-        String atividadesDisponiveis = dadosPacote[7];
-        System.out.println("Nome: " + nome);
-        System.out.println("Data de partida: " + dataPartida);
-        System.out.println("Duração em dias: " + duracao);
-        System.out.println("Preço: R$ " + preco);
-        System.out.println("Assentos Disponíveis: " + assentosDisponiveis);
-        System.out.println("Categoria: " + categoria);
-        System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
-        System.out.println("");
-        */
+        
+        ArrayList<Pacote> pacotesEncontrados = new ArrayList<>();
+        pacotesEncontrados = repPacote.getAllPacotesFromSameAttribute("destino", destinoDesejado);
+        
+        if (pacotesEncontrados.isEmpty()){
+            System.out.println("Não foi possível encontrar pacotes para esse destino!");
+        } else {
+            System.out.println("=== PACOTES ENCONTRADOS COM O DESTINO " + destinoDesejado + " ====");
+            for (Pacote pacote : pacotesEncontrados){
+                String nome = pacote.getNome();
+                Date dataPartida = pacote.getDataPartida();
+                int duracao = pacote.getDuracao();
+                double preco = pacote.getPreco();
+                int assentosDisponiveis = pacote.getAssentosDisponiveis();
+                CategoriaDeDestino categoria = pacote.getCategoria();
+                ArrayList<String> atividadesDisponiveis = pacote.getAtividadesDisponiveis();
+                
+                System.out.println("Nome: " + nome);
+                System.out.println("Data de partida: " + dataPartida);
+                System.out.println("Duração em dias: " + duracao);
+                System.out.println("Preço: R$ " + preco);
+                System.out.println("Assentos Disponíveis: " + assentosDisponiveis);
+                System.out.println("Descrição da categoria: " + categoria.getDescricao());
+                System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
+                System.out.println("");
+            }
+        }
     }
 
     public void buscarPacotePorCategoria(String categoriaDesejada){
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader(arquivoPacotes));
-            String linhaAtual;
+        RepositorioPacote repPacote = new RepositorioPacote();
+        
+        ArrayList<Pacote> pacotesEncontrados = new ArrayList<>();
+        pacotesEncontrados = repPacote.getAllPacotesFromSameAttribute("categoria", categoriaDesejada);
+        
+        if (pacotesEncontrados.isEmpty()){
+            System.out.println("Não foi possível encontrar pacotes com essa categoria!");
+        } else {
             System.out.println("=== PACOTES ENCONTRADOS COM A CATEGORIA " + categoriaDesejada + " ====");
-            while ((linhaAtual = reader.readLine()) != null) {
-                String[] dadosPacote = linhaAtual.split(",");
-                String categoriaPacote = dadosPacote[6];
-
-                // Verificar se o destino atual é o desejado
-                if (categoriaPacote.equalsIgnoreCase(categoriaDesejada)){ 
-                    String nome = dadosPacote[0];
-                    String destino = dadosPacote[1];
-                    String dataPartida = dadosPacote[2];
-                    String duracao = dadosPacote[3];
-                    String preco = dadosPacote[4];
-                    String assentosDisponiveis = dadosPacote[5];
-                    String atividadesDisponiveis = dadosPacote[7];
-                    System.out.println("Nome: " + nome);
-                    System.out.println("Destino: " + destino);
-                    System.out.println("Data de partida: " + dataPartida);
-                    System.out.println("Duração em dias: " + duracao);
-                    System.out.println("Preço: R$ " + preco);
-                    System.out.println("Assentos Disponíveis: " + assentosDisponiveis);
-                    System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
-                    System.out.println("");
-                }
+            for (Pacote pacote : pacotesEncontrados){
+                String nome = pacote.getNome();
+                Destino destino = pacote.getDestino();
+                Date dataPartida = pacote.getDataPartida();
+                int duracao = pacote.getDuracao();
+                double preco = pacote.getPreco();
+                int assentosDisponiveis = pacote.getAssentosDisponiveis();
+                ArrayList<String> atividadesDisponiveis = pacote.getAtividadesDisponiveis();
+                
+                System.out.println("Nome: " + nome);
+                System.out.println("Destino: " + destino.getNome());
+                System.out.println("Data de partida: " + dataPartida);
+                System.out.println("Duração em dias: " + duracao);
+                System.out.println("Preço: R$ " + preco);
+                System.out.println("Assentos Disponíveis: " + assentosDisponiveis);
+                System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
+                System.out.println("");
             }
-            reader.close();
-        } catch (IOException e){
-            System.out.println("Erro ao ler o arquivo de pacotes de viagem: " + e.getMessage());
         }
     }
 
     public void buscarPacotePorPrecoMaximo(double precoMaximo){
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader(arquivoPacotes));
-            String linhaAtual;
-            System.out.println("=== PACOTES ENCONTRADOS COM PREÇO MÁXIMO DE R$S " + precoMaximo + " ====");
+        RepositorioPacote repPacote = new RepositorioPacote();
 
-            while ((linhaAtual = reader.readLine()) != null) {
-                String[] dadosPacote = linhaAtual.split(",");
-                double precoAtual = Double.parseDouble(dadosPacote[4]);
+        ArrayList<Pacote> pacotesEncontrados = new ArrayList<>();
+        pacotesEncontrados = repPacote.getAllPacotes();
+        int quantidadePacotes = 0;
 
-                // Verificar se o destino atual é o desejado
-                if (precoAtual <= precoMaximo){ 
-                    String nome = dadosPacote[0];
-                    String destino = dadosPacote[1];
-                    String dataPartida = dadosPacote[2];
-                    String duracao = dadosPacote[3];
-                    String assentosDisponiveis = dadosPacote[5];
-                    String categoria = dadosPacote[6];
-                    String atividadesDisponiveis = dadosPacote[7];
-                    System.out.println("Nome: " + nome);
-                    System.out.println("Destino: " + destino);
-                    System.out.println("Data de partida: " + dataPartida);
-                    System.out.println("Duração em dias: " + duracao);
-                    System.out.println("Assentos Disponíveis: " + assentosDisponiveis);
-                    System.out.println("Categoria: " + categoria);
-                    System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
-                    System.out.println("");
-                }
+        System.out.println("=== PACOTES ENCONTRADOS COM PREÇO MÁXIMO DE R$ " + precoMaximo + " ===");
+        for (Pacote pacote : pacotesEncontrados){
+            if (pacote.getPreco() <= precoMaximo){
+                String nome = pacote.getNome();
+                Destino destino = pacote.getDestino();
+                Date dataPartida = pacote.getDataPartida();
+                int duracao = pacote.getDuracao();
+                int assentosDisponiveis = pacote.getAssentosDisponiveis();
+                CategoriaDeDestino categoria = pacote.getCategoria();
+                ArrayList<String> atividadesDisponiveis = pacote.getAtividadesDisponiveis();
+
+                System.out.println("Nome: " + nome);
+                System.out.println("Destino: " + destino.getNome());
+                System.out.println("Data de partida: " + dataPartida);
+                System.out.println("Duração em dias: " + duracao);
+                System.out.println("Assentos Disponíveis: " + assentosDisponiveis);
+                System.out.println("Descrição da categoria: " + categoria.getDescricao());
+                System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
+                System.out.println("");
+                quantidadePacotes += 1;
             }
-            reader.close();
-        } catch (IOException e){
-            System.out.println("Erro ao ler o arquivo de pacotes de viagem: " + e.getMessage());
+        }
+        if (quantidadePacotes == 0){
+            System.out.println("Não foi possível encontrar nenhum pacote com preço menor do que o desejado!");
         }
     }
 
