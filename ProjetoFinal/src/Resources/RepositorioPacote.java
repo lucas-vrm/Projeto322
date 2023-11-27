@@ -1,11 +1,9 @@
 package Resources;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import Model.Pacote;
@@ -50,6 +48,18 @@ public class RepositorioPacote extends Repositorio {
         ArrayList<Pacote> pacotesObjetos = new ArrayList<>();
 
         pacotesMaps = getAllObjectsMapBySameAttribute(nomeAtributo, valorAtributo);
+        for(Map<String, String> pacote : pacotesMaps) {
+            Pacote tempPacote = criarPacoteComMap(pacote);
+            pacotesObjetos.add(tempPacote);
+        }
+        return pacotesObjetos;
+    }
+
+    public ArrayList<Pacote> getAllPacotes() {
+        ArrayList<Map<String, String>> pacotesMaps = new ArrayList<>();
+        ArrayList<Pacote> pacotesObjetos = new ArrayList<>();
+
+        pacotesMaps = getAllObjectsMap();
         for(Map<String, String> pacote : pacotesMaps) {
             Pacote tempPacote = criarPacoteComMap(pacote);
             pacotesObjetos.add(tempPacote);

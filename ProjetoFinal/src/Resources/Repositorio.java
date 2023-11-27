@@ -110,6 +110,31 @@ public class Repositorio {
         return allObjectMaps;
     }
 
+    public ArrayList<Map<String, String>> getAllObjectsMap() {
+        String[] headernames = getHeaderNames();
+        ArrayList<Map<String, String>> allObjectMaps = new ArrayList<>();
+        ArrayList<ArrayList<String>> items = null;
+
+        try {
+            items = pullAllItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+        for (ArrayList<String> item : items) {
+            Map<String, String> tempObjectMap = new HashMap<>();
+            int i = 0;
+            for(String headername : headernames) {
+                tempObjectMap.put(headername, item.get(i));
+                i++;
+            }
+            allObjectMaps.add(tempObjectMap);
+            
+        }
+        return allObjectMaps;
+    }
+
     public ArrayList<ArrayList<String>> pullAllItems() throws IOException{    
         return driver.readItems(this.filePathName);
     }
