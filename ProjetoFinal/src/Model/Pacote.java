@@ -9,16 +9,16 @@ public class Pacote implements Reservavel {
     private double preco;
     private int assentosDisponiveis;
     private CategoriaDeDestino categoria;
-    private List<String> atividadesDisponiveis;
+    protected List<String> atividadesDisponiveis;
 
     // Construtor
-    public Pacote(Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, CategoriaDeDestino categoria, List<String> atividadesDisponiveis) {
+    public Pacote(Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, String categoria, List<String> atividadesDisponiveis) {
         this.destino = destino;
         this.dataPartida = dataPartida;
         this.duracao = duracao;
         this.preco = preco;
         this.assentosDisponiveis = assentosDisponiveis;
-        this.categoria = categoria;
+        this.categoria = CategoriaDeDestino.fromDescricao(categoria);
         this.atividadesDisponiveis = atividadesDisponiveis;
     }
 
@@ -97,6 +97,10 @@ public class Pacote implements Reservavel {
             System.out.println("Não há assentos suficientes para a reserva.");
             return false;
         }
+    }
+
+    public void adicionaAtividades(String atividade) {
+        atividadesDisponiveis.add(atividade);
     }
 
 }

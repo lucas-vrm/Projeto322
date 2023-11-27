@@ -1,5 +1,5 @@
 package Model;
-import java.util.List;
+import java.util.*;
 
 public class Destino {
     private String nome;
@@ -7,10 +7,10 @@ public class Destino {
     private List<String> pontosTuristicos;
 
     // Construtor
-    public Destino(String nome, String descricao, List<String> pontosTuristicos) {
+    public Destino(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
-        this.pontosTuristicos = pontosTuristicos;
+        this.pontosTuristicos = new ArrayList<>();
     }
 
     // Métodos getters e setters
@@ -40,4 +40,7 @@ public class Destino {
     }
 
     // Outros métodos relevantes para a classe Destino
+    public void adicionaPontoTuristico(String pontoTuristico) {
+        pontosTuristicos.add(pontoTuristico);
+    }
 }
