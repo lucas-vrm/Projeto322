@@ -17,7 +17,7 @@ public class Main {
 			//lucas.adicionarPacote(scanner);
 			//lucas.removerPacote("asdasd");
 			Pacote pacote = lucas.getRepPacote().getPacoteByName("Pacote Rio de Janeiro para casal");
-			System.out.println(pacote.getNome());
+			System.out.println(pacote.toString());
 		}
 		//MainMethods.controleDeTelas(usuario);
 	}

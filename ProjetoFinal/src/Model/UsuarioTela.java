@@ -11,8 +11,7 @@ import java.io.IOException;
 public class UsuarioTela {
     private String arquivoPacotes; // Nome do arquivo CSV com os pacotes de viagem
 
-    public UsuarioTela(String arquivoPacotes){
-        this.arquivoPacotes = arquivoPacotes;
+    public UsuarioTela(){
     }
 
     public void userScreen(Cliente cliente){
@@ -159,13 +158,11 @@ public class UsuarioTela {
     }
 
     public void buscarPacotePorDestino(String destinoDesejado){
-        String linhaAtual;
         RepositorioPacote repPacote = new RepositorioPacote();
         Pacote pacote = repPacote.getPacoteByName(destinoDesejado);
             
         System.out.println("=== PACOTES ENCONTRADOS COM O DESTINO " + destinoDesejado + " ====");
-
- 
+        /*
         String nome = pacote.getNome();
         String dataPartida = dadosPacote[2];
         String duracao = dadosPacote[3];
@@ -181,7 +178,7 @@ public class UsuarioTela {
         System.out.println("Categoria: " + categoria);
         System.out.println("Atividades Disponíveis: " + atividadesDisponiveis);
         System.out.println("");
-
+        */
     }
 
     public void buscarPacotePorCategoria(String categoriaDesejada){

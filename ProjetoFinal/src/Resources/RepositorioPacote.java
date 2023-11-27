@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import Model.Pacote;
@@ -19,19 +20,18 @@ public class RepositorioPacote extends Repositorio {
         super(pacoteDriver, diretorioPacote, pacoteHeaderNames);
     }
 
-    private static Date convertStringToDate(String dateString) {
+    private static java.util.Date convertStringToDate(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            return (Date) dateFormat.parse(dateString);
+            return dateFormat.parse(dateString);
         } catch (ParseException e) {
-            // Handle the exception if the string is not in the expected format
             System.err.println("Error: Unable to parse the date. " + e.getMessage());
-            return null; // or throw an exception if you prefer
+            return null;
         }
     }
 
     private ArrayList<String> strToArray(String stringList) {
-        return new ArrayList<>(Arrays.asList(stringList.split("|")));
+        return new ArrayList<>(Arrays.asList(stringList.split("\\|")));
     }
 
     public Pacote criarPacoteComMap(Map<String, String> usr) {

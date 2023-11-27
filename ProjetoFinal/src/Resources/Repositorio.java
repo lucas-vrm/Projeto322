@@ -66,7 +66,12 @@ public class Repositorio {
         }
         
         for (ArrayList<String> item : items) {
-            if (item.get(attribute_column).equals(AttributeValue)) {
+
+            System.out.println(AttributeValue);
+            System.out.println(attribute_column);
+            System.out.println(item);
+            System.out.println(item.get(attribute_column));
+            if (item.get(attribute_column).equalsIgnoreCase(AttributeValue)) {
                 int i = 0;
                 for(String headername : headernames) {
                     objectMap.put(headername, item.get(i));
