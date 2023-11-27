@@ -3,6 +3,8 @@ package Resources;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Repositorio {
     private Driver driver;
@@ -32,7 +34,7 @@ public class Repositorio {
         this.headerNames = headerNames;
     }
     
-    protected void writeHeaderOnly() throws FileNotFoundException {
+    public void writeHeaderOnly() throws FileNotFoundException {
         driver.writeHeaderOnly(filePathName, headerNames);
     }
 
@@ -44,6 +46,32 @@ public class Repositorio {
             }
         }
         return outputList;
+    }
+
+    public Map<String, String> getObjectMapByAttribute(String AtributeName, Object AttributeValue) {
+        String[] headernames = getHeaderNames();
+        int attribute_column = getDriver().attributeColumn(AtributeName, headernames);
+        ArrayList<ArrayList<String>> items = null;
+        Map<String, String> objectMap = new HashMap<>();
+
+        try {
+            items = pullAllItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+        for (ArrayList<String> item : items) {
+            if (item.get(attribute_column).equals(AttributeValue.toString())) {
+                int i = 0;
+                for(String headername : headernames) {
+                    objectMap.put(headername, item.get(i));
+                    i++;
+                }
+                return objectMap;
+            }
+        }
+        return null;
     }
 
     public ArrayList<ArrayList<String>> pullAllItems() throws IOException{    
@@ -64,7 +92,7 @@ public class Repositorio {
         // writeHeaderOnly();
         driver.addMultipleString(csvFileData, filePathName, headerNames);
     }
-
+    
     public int searchItemByAttributeValue(String atributo, Object value) throws IOException {
         int column_index = this.driver.attributeColumn(atributo, this.headerNames);
         ArrayList<ArrayList<String>> items = pullAllItems();

@@ -8,18 +8,20 @@ public class Driver {
     public Driver() {
     }
 
-    private int indexOfHeader(String headerName, String headerNames[]) {
-        for (int i = 0; i < headerNames.length; i++) {
+    private int indexOfHeader(String headerName, String[] headerNames) {
+        int i;
+        for (i = 0; i < headerNames.length; i++) {
             if (headerNames[i].equals(headerName)) {
                 return i;
             }
         }
-        System.out.println("Header " + headerName + " not found");
+
+        System.out.println("Header " + headerName + " not found" + i);
         System.exit(1);
         return 0;
     }
 
-    private Object[] emptyCsvOutput(String headerNames[], int headerLength) {
+    private Object[] emptyCsvOutput(String[] headerNames, int headerLength) {
         Object[] csvOutput = new Object[headerLength];
         for (int i = 0; i < headerLength; i++) {
             csvOutput[i] = "empty";
@@ -185,8 +187,8 @@ public class Driver {
         return records;
     }
 
-    public int attributeColumn(String headerName, String headerNames[]) {
+    public int attributeColumn(String headerName, String[] headerNames) {
         return indexOfHeader(headerName, headerNames);
     }
-    
+
 }

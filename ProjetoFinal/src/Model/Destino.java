@@ -4,13 +4,13 @@ import java.util.*;
 public class Destino {
     private String nome;
     private String descricao;
-    private List<String> pontosTuristicos;
+    private ArrayList<String> pontosTuristicos;
 
     // Construtor
-    public Destino(String nome, String descricao) {
+    public Destino(String nome, String descricao, ArrayList<String> pontosTuristicos) {
         this.nome = nome;
         this.descricao = descricao;
-        this.pontosTuristicos = new ArrayList<>();
+        this.pontosTuristicos = pontosTuristicos;
     }
 
     // Métodos getters e setters
@@ -31,11 +31,11 @@ public class Destino {
         this.descricao = descricao;
     }
 
-    public List<String> getPontosTuristicos() {
+    public ArrayList<String> getPontosTuristicos() {
         return pontosTuristicos;
     }
 
-    public void setPontosTuristicos(List<String> pontosTuristicos) {
+    public void setPontosTuristicos(ArrayList<String> pontosTuristicos) {
         this.pontosTuristicos = pontosTuristicos;
     }
 

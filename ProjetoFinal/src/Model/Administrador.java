@@ -1,27 +1,42 @@
 package Model;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.nio.charset.StandardCharsets;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import Resources.RepositorioDestino;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Administrador extends Usuario {
-	
-	private static final String arquivo = "./files/pacotes_viagem.csv";
+    RepositorioDestino repDestino = new RepositorioDestino();
 
-	public Administrador(String nome, String contato, String email, String senha, int id) {
+    RepositorioDestino repPacote = new RepositorioDestino();
+
+    public Administrador(String nome, String contato, String email, String senha, int id) {
 		super(nome, contato, email, senha, id);
 	}
 	
+    public RepositorioDestino getRepDestino() {
+        return this.repDestino;
+    }
+
+    public void setRepDestino(RepositorioDestino repDestino) {
+        this.repDestino = repDestino;
+    }
+    
+	public RepositorioDestino getRepPacote() {
+        return this.repPacote;
+    }
+
+    public void setRepPacote(RepositorioDestino repPacote) {
+        this.repPacote = repPacote;
+    }
+
 	public void fazAcao(int acao) {
 		switch(acao) {
 			case 0:
@@ -37,187 +52,134 @@ public class Administrador extends Usuario {
 		}
 	}
 
-    public Destino criaNovoDestino() {
-        Scanner scanner = new Scanner(System.in);
+    public Destino criaNovoDestino(Scanner scanner) {
+        boolean entradaValida = false;
+        String nome = null, descricao = null;
+        ArrayList<String> pontosTuristicos = new ArrayList<>();
 
-        System.out.println("Digite o destino do Pacote de Viagem:");
-        String destino = scanner.nextLine();
+        while (!entradaValida) {
+            try {
+                System.out.println("==== Cadastro de Destino ====");
 
-        System.out.println("De uma descricao do Pacote de Viagem:");
-        String descricao = scanner.nextLine();
+                System.out.println("Digite o nome do Destino:");
+                nome = scanner.nextLine();
 
-        Destino d = new Destino(destino, descricao);
+                System.out.println("De uma descricao do Destino:");
+                descricao = scanner.nextLine();
 
-        System.out.println("Adicione pontos turisticos (digite 0 para parar):");
-        while (true) {
-            String entrada = scanner.nextLine();
-
-            if (entrada.equals("0")) {
-                break;  // Saia do loop se o usuário digitar "0"
-            }
-
-            d.adicionaPontoTuristico(entrada);
-        }
-
-        return d;
-    }
-
-    public Pacote criaNovoPacote() throws ParseException {
-        Scanner scanner = new Scanner(System.in);
-        
-        Destino d = criaNovoDestino();
-
-        System.out.println("Digite a data de partida (formato YYYY-MM-DD):");
-        SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd");
-        String dataDePartidaTexto = scanner.nextLine();
-        Date dataDePartida = formatoData.parse(dataDePartidaTexto);
-
-        System.out.println("Digite a duração da viagem em dias:");
-        int duracao = scanner.nextInt();
-
-        System.out.println("Digite o preço do Pacote de Viagem:");
-        double preco = scanner.nextDouble();
-
-        System.out.println("Digite a quantidade de assentos disponíveis:");
-        int assentosDisponiveis = scanner.nextInt();
-
-        System.out.println("Digite a categoria do pacote:");
-        String categoria = scanner.nextLine();
-
-        List<String> atividades = new ArrayList<>();
-
-        Pacote p = new Pacote(d, dataDePartida, duracao, preco, assentosDisponiveis, categoria, atividades);
-
-        System.out.println("Adicione atividades (digite 0 para parar):");
-        while (true) {
-            String entrada = scanner.nextLine();
-
-            if (entrada.equals("0")) {
-                break;  // Saia do loop se o usuário digitar "0"
-            }
-
-            p.adicionaAtividades(entrada);
-        }
-
-        return p;
-    }
-	
-	public void adicionaPacote(Pacote pacote) {
-		try {
-			//verificar se arquivo ja existe
-			boolean arquivoExiste = new File(arquivo).exists();
-			
-			
-			//Abre o escritor para adicionar dados ao arquivo
-			FileWriter escritor = new FileWriter(arquivo, StandardCharsets.ISO_8859_1, arquivoExiste);
-			if (!arquivoExiste) {
-                escritor.write("Destino;PartidaDuracao;Preço;AssentosDisponiveis\n");
-            }
-			
-			//Escrever os dados do pacote de viagem
-			escritor.write(pacote.getDestino() + ";" + 
-					pacote.getDataPartida() + ";" + 
-					pacote.getDuracao() + ";" + 
-					pacote.getPreco() + ";" + 
-					pacote.getAssentosDisponiveis() + "\n"
-			);
-			
-			// Escrever todos os dados do buffer no arquivo imediatamente
-            escritor.flush();
-            
-            // Fecha o recurso de escrita
-            escritor.close();
-           
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void apagaPacote(Pacote pacote) {
-		try {
-            FileReader fileReader = new FileReader(arquivo);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            List<String> linhas = new ArrayList<>();
-            String linhaAtual;
-
-            while ((linhaAtual = bufferedReader.readLine()) != null) {
-                linhas.add(linhaAtual);
-            }
-
-            bufferedReader.close();
-
-            FileWriter fileWriter = new FileWriter(arquivo);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            boolean encontrado = false;
-
-            for (String linha : linhas) {
-                String[] dados = linha.split(",");
-                if (dados.length > 0 && !dados[0].equals(pacote)) {
-                    // Se o destino nao for o que queremos apagar, escrevemos no arquivo
-                    bufferedWriter.write(linha);
-                    bufferedWriter.newLine();
-                } else {
-                    encontrado = true;
+                System.out.println("Adicione pontos turisticos (digite 0 para parar):");
+                while (true) {
+                    String entrada = scanner.nextLine();
+                    if (entrada.equals("0")) {
+                        break;  // Saia do loop se o usuário digitar "0"
+                    }
+                    pontosTuristicos.add(entrada);
                 }
+                scanner.nextLine();
+                entradaValida = true;
+                
+            } catch (InputMismatchException e) {
+                System.out.println("Erro: Valor inserido inválido. Certifique-se de inserir o tipo correto de dado.");
+                scanner.nextLine();
             }
-
-            bufferedWriter.close();
-
-            if (!encontrado) {
-                System.out.println("Pacote de viagem não encontrado.");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        return new Destino(nome, descricao, pontosTuristicos);
+    }
 
-	}
+    public Pacote criaNovoPacote(Scanner scanner) {
+        boolean entradaValida = false;
+        String nome = null, nomeDestino = null, categoria = null;
+        Destino destino = null;
+        Date dataDePartida = null;
+        int duracao = 0, assentosDisponiveis = 0;
+        double preco = 0.0;
+        ArrayList<String> atividadesDisponiveis = new ArrayList<>();
+
+        while (!entradaValida) {
+            try {
+                System.out.println("==== Cadastro de Pacote ====");
+
+                System.out.println("Digite o nome do Pacote:");
+                nome = scanner.nextLine();
+
+                System.out.println("Digite o nome do Destino:");
+                nomeDestino = scanner.nextLine();
+                destino = repDestino.getDestinoByName(nomeDestino);
+
+                System.out.println("Digite a data de partida (formato YYYY-MM-DD):");
+                SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd");
+                dataDePartida = formatoData.parse(scanner.nextLine());
+
+                System.out.println("Digite a duração da viagem em dias:");
+                duracao = scanner.nextInt();
+
+                System.out.println("Digite o preço do Pacote de Viagem:");
+                preco = scanner.nextDouble();
+
+                System.out.println("Digite a quantidade de assentos disponíveis:");
+                assentosDisponiveis = scanner.nextInt();
+
+                scanner.nextLine();
+                System.out.println("Digite a categoria do pacote:");
+                categoria = scanner.nextLine();
+
+                System.out.println("Adicione atividades (digite 0 para parar):");
+                while (true) {
+                    String entrada = scanner.nextLine();
+                    if (entrada.equals("0")) {
+                        break;  // Saia do loop se o usuário digitar "0"
+                    }
+                    atividadesDisponiveis.add(entrada);
+                }
+                
+                scanner.nextLine();
+                entradaValida = true;
+                
+            } catch (InputMismatchException e) {
+                System.out.println("Erro: Valor inserido inválido. Certifique-se de inserir o tipo correto de dado.");
+                scanner.nextLine();
+            } catch (ParseException e) {
+                System.out.println("Erro: Data inserida inválida. Certifique-se de inserir o tipo correto de dado.");
+                scanner.nextLine();
+            }
+        }
+        return new Pacote(nome, destino, dataDePartida, duracao, preco, assentosDisponiveis, categoria, atividadesDisponiveis);
+    }
 	
-	// Método para listar os Pacotes do arquivo CSV
-    /*public static ArrayList<Pacote> ListarPacote() {
-        ArrayList<Pacote> lista = new ArrayList<>();
-        
+    public void adicionarDestino(Scanner scanner) {
         try {
-            // Abrir o leitor para ler o arquivo
-            BufferedReader leitor = new BufferedReader(new FileReader(arquivo));
-            String linha;
-            boolean primeiraLinha = true;
-            
-            while ( (linha = leitor.readLine()) != null ) {
-                // Ignora a primeira linha 
-                if (primeiraLinha) {
-                    primeiraLinha = false;
-                    continue;
-                }
-                
-                // Dividir a linha em partes usando o ponto e vírgula como separador
-                String[] partes = linha.split(";");
-                
-                //Destino destino = partes[0];
-                //Date dataPartida = partes[1];
-                //int duracao = partes[2];
-                //double preco = partes[3];
-                //int assentosDisponiveis = partes[4];
-                
-                // Criar o objeto Pacote
-                //Pacote pacote = new Pacote(destino, dataPartida, duracao, preco, assentosDisponiveis);
-                
-                // Adiciona na lista
-                //lista.add(pacote);
-                
-                // Imprimir informações do Pacote
-                //System.out.println("Nome: " + nome + " - Nota: " + nota + " - Assistido: " + assistido);
-            }
-            
-            leitor.close();
-            
-        } catch(IOException e) {
+            repDestino.addItem(criaNovoDestino(scanner));
+        } catch (FileNotFoundException e) {
+            System.out.println("Erro ao criar destino");
             e.printStackTrace();
         }
-        
-        return lista;
-    }*/
+    }
+
+    public void removerDestino(String nomeDestino) {
+        try {
+            repDestino.removeItemByAttributeValue("nome", nomeDestino);
+        } catch (IOException e) {
+            System.out.println("Erro ao remover destino");
+            e.printStackTrace();
+        }
+    }
+
+    public void adicionarPacote(Scanner scanner) {
+        try {
+            repPacote.addItem(criaNovoPacote(scanner));
+        } catch (FileNotFoundException e) {
+            System.out.println("Erro ao criar pacote");
+            e.printStackTrace();
+        }
+    }
+
+    public void removerPacote(String nomePacote) {
+        try {
+            repDestino.removeItemByAttributeValue("nome", nomePacote);
+        } catch (IOException e) {
+            System.out.println("Erro ao remover pacote");
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -1,18 +1,21 @@
 package Model;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Pacote implements Reservavel {
-	private Destino destino;
+    private String nome;
+    private Destino destino;
     private Date dataPartida;
     private int duracao; // em dias
     private double preco;
     private int assentosDisponiveis;
     private CategoriaDeDestino categoria;
-    protected List<String> atividadesDisponiveis;
+    protected ArrayList<String> atividadesDisponiveis;
 
     // Construtor
-    public Pacote(Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, String categoria, List<String> atividadesDisponiveis) {
+    public Pacote(String nome, Destino destino, Date dataPartida, int duracao, double preco, int assentosDisponiveis, 
+                    String categoria, ArrayList<String> atividadesDisponiveis) {
+        this.nome = nome;
         this.destino = destino;
         this.dataPartida = dataPartida;
         this.duracao = duracao;
@@ -23,6 +26,14 @@ public class Pacote implements Reservavel {
     }
 
     // Métodos getters e setters
+
+	public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
     public Destino getDestino() {
         return destino;
@@ -72,11 +83,11 @@ public class Pacote implements Reservavel {
         this.categoria = categoria;
     }
     
-    public List<String> getAtividadesDisponiveis() {
+    public ArrayList<String> getAtividadesDisponiveis() {
         return atividadesDisponiveis;
     }
 
-    public void setAtividadesDisponiveis(List<String> atividadesDisponiveis) {
+    public void setAtividadesDisponiveis(ArrayList<String> atividadesDisponiveis) {
         this.atividadesDisponiveis = atividadesDisponiveis;
     }
 
