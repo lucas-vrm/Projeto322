@@ -7,8 +7,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class Administrador extends Usuario {
 	
@@ -32,6 +36,71 @@ public class Administrador extends Usuario {
 				System.out.println("Algo errado");
 		}
 	}
+
+    public Destino criaNovoDestino() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Digite o destino do Pacote de Viagem:");
+        String destino = scanner.nextLine();
+
+        System.out.println("De uma descricao do Pacote de Viagem:");
+        String descricao = scanner.nextLine();
+
+        Destino d = new Destino(destino, descricao);
+
+        System.out.println("Adicione pontos turisticos (digite 0 para parar):");
+        while (true) {
+            String entrada = scanner.nextLine();
+
+            if (entrada.equals("0")) {
+                break;  // Saia do loop se o usuário digitar "0"
+            }
+
+            d.adicionaPontoTuristico(entrada);
+        }
+
+        return d;
+    }
+
+    public Pacote criaNovoPacote() throws ParseException {
+        Scanner scanner = new Scanner(System.in);
+        
+        Destino d = criaNovoDestino();
+
+        System.out.println("Digite a data de partida (formato YYYY-MM-DD):");
+        SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd");
+        String dataDePartidaTexto = scanner.nextLine();
+        Date dataDePartida = formatoData.parse(dataDePartidaTexto);
+
+        System.out.println("Digite a duração da viagem em dias:");
+        int duracao = scanner.nextInt();
+
+        System.out.println("Digite o preço do Pacote de Viagem:");
+        double preco = scanner.nextDouble();
+
+        System.out.println("Digite a quantidade de assentos disponíveis:");
+        int assentosDisponiveis = scanner.nextInt();
+
+        System.out.println("Digite a categoria do pacote:");
+        String categoria = scanner.nextLine();
+
+        List<String> atividades = new ArrayList<>();
+
+        Pacote p = new Pacote(d, dataDePartida, duracao, preco, assentosDisponiveis, categoria, atividades);
+
+        System.out.println("Adicione atividades (digite 0 para parar):");
+        while (true) {
+            String entrada = scanner.nextLine();
+
+            if (entrada.equals("0")) {
+                break;  // Saia do loop se o usuário digitar "0"
+            }
+
+            p.adicionaAtividades(entrada);
+        }
+
+        return p;
+    }
 	
 	public void adicionaPacote(Pacote pacote) {
 		try {
@@ -107,7 +176,7 @@ public class Administrador extends Usuario {
 	}
 	
 	// Método para listar os Pacotes do arquivo CSV
-    public static ArrayList<Pacote> ListarPacote() {
+    /*public static ArrayList<Pacote> ListarPacote() {
         ArrayList<Pacote> lista = new ArrayList<>();
         
         try {
@@ -149,6 +218,6 @@ public class Administrador extends Usuario {
         }
         
         return lista;
-    }
+    }*/
 
 }

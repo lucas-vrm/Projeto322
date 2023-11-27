@@ -19,11 +19,12 @@ public enum CategoriaDeDestino {
         return descricao;
     }
 
-    public static void main(String[] args) {
-        CategoriaDeDestino[] categorias = CategoriaDeDestino.values();
-
-        for (CategoriaDeDestino categoria : categorias) {
-            System.out.println(categoria.getDescricao());
+    public static CategoriaDeDestino fromDescricao(String descricao) {
+        for (CategoriaDeDestino categoria : CategoriaDeDestino.values()) {
+            if (categoria.descricao.equalsIgnoreCase(descricao)) {
+                return categoria;
+            }
         }
+        throw new IllegalArgumentException("Categoria de destino inválida: " + descricao);
     }
 }
