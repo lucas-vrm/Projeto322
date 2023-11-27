@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class UsuarioTela {
-
-    public UsuarioTela(){
-    }
-
     public void userScreen(Cliente cliente){
         try(Scanner scanner = new Scanner(System.in)){
             System.out.println("---- Janela do Cliente ----");
