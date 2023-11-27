@@ -6,6 +6,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import Resources.RepositorioDestino;
+import Resources.RepositorioPacote;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,8 +15,7 @@ import java.text.SimpleDateFormat;
 
 public class Administrador extends Usuario {
     RepositorioDestino repDestino = new RepositorioDestino();
-
-    RepositorioDestino repPacote = new RepositorioDestino();
+    RepositorioPacote repPacote = new RepositorioPacote();
 
     public Administrador(String nome, String contato, String email, String senha, int id) {
 		super(nome, contato, email, senha, id);
@@ -29,11 +29,11 @@ public class Administrador extends Usuario {
         this.repDestino = repDestino;
     }
     
-	public RepositorioDestino getRepPacote() {
+	public RepositorioPacote getRepPacote() {
         return this.repPacote;
     }
 
-    public void setRepPacote(RepositorioDestino repPacote) {
+    public void setRepPacote(RepositorioPacote repPacote) {
         this.repPacote = repPacote;
     }
 
@@ -107,8 +107,8 @@ public class Administrador extends Usuario {
                 destino = repDestino.getDestinoByName(nomeDestino);
 
                 System.out.println("Digite a data de partida (formato YYYY-MM-DD):");
-                SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd");
-                dataDePartida = formatoData.parse(scanner.nextLine());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                dataDePartida = dateFormat.parse(scanner.nextLine());
 
                 System.out.println("Digite a duração da viagem em dias:");
                 duracao = scanner.nextInt();
@@ -120,8 +120,16 @@ public class Administrador extends Usuario {
                 assentosDisponiveis = scanner.nextInt();
 
                 scanner.nextLine();
-                System.out.println("Digite a categoria do pacote:");
-                categoria = scanner.nextLine();
+                boolean categoriaValida = false;
+                while(!categoriaValida) {
+                    System.out.println("Digite a categoria do pacote:");
+                    CategoriaDeDestino.imprimirTodasCategorias();
+                    categoria = scanner.nextLine();
+                    categoriaValida = CategoriaDeDestino.isCategoriaValida(categoria);
+                    if (!categoriaValida) {
+                        System.out.println("Erro: Categoria inválida.");
+                    }
+                }
 
                 System.out.println("Adicione atividades (digite 0 para parar):");
                 while (true) {
@@ -132,15 +140,14 @@ public class Administrador extends Usuario {
                     atividadesDisponiveis.add(entrada);
                 }
                 
-                scanner.nextLine();
                 entradaValida = true;
                 
             } catch (InputMismatchException e) {
                 System.out.println("Erro: Valor inserido inválido. Certifique-se de inserir o tipo correto de dado.");
-                scanner.nextLine();
+                //scanner.nextLine();
             } catch (ParseException e) {
-                System.out.println("Erro: Data inserida inválida. Certifique-se de inserir o tipo correto de dado.");
-                scanner.nextLine();
+                System.out.println("Erro: Formato de data inválido.");
+                //scanner.nextLine();
             }
         }
         return new Pacote(nome, destino, dataDePartida, duracao, preco, assentosDisponiveis, categoria, atividadesDisponiveis);
@@ -157,7 +164,8 @@ public class Administrador extends Usuario {
 
     public void removerDestino(String nomeDestino) {
         try {
-            repDestino.removeItemByAttributeValue("nome", nomeDestino);
+            repDestino.removeItemByStringValue("nome", nomeDestino);
+            System.out.println("Destino " + nomeDestino + " removido com sucesso");
         } catch (IOException e) {
             System.out.println("Erro ao remover destino");
             e.printStackTrace();
@@ -175,7 +183,8 @@ public class Administrador extends Usuario {
 
     public void removerPacote(String nomePacote) {
         try {
-            repDestino.removeItemByAttributeValue("nome", nomePacote);
+            repPacote.removeItemByStringValue("nome", nomePacote);
+            System.out.println("Pacote " + nomePacote + " removido com sucesso");
         } catch (IOException e) {
             System.out.println("Erro ao remover pacote");
             e.printStackTrace();

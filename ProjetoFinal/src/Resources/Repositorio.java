@@ -38,6 +38,10 @@ public class Repositorio {
         driver.writeHeaderOnly(filePathName, headerNames);
     }
 
+    public void eraseLines() throws FileNotFoundException {
+        driver.eraseLines(filePathName);
+    }
+
     private ArrayList<ArrayList<String>> removeStringByIndex(ArrayList<ArrayList<String>> stringList, int targetIndex) {
         ArrayList<ArrayList<String>> outputList = new ArrayList<>();
         for(int i = 0; i < stringList.size(); i++) {
@@ -48,9 +52,9 @@ public class Repositorio {
         return outputList;
     }
 
-    public Map<String, String> getObjectMapByAttribute(String AtributeName, Object AttributeValue) {
+    public Map<String, String> getObjectMapByAttribute(String AtributeName, String AttributeValue) {
         String[] headernames = getHeaderNames();
-        int attribute_column = getDriver().attributeColumn(AtributeName, headernames);
+        int attribute_column = this.driver.attributeColumn(AtributeName, headernames);
         ArrayList<ArrayList<String>> items = null;
         Map<String, String> objectMap = new HashMap<>();
 
@@ -62,7 +66,7 @@ public class Repositorio {
         }
         
         for (ArrayList<String> item : items) {
-            if (item.get(attribute_column).equals(AttributeValue.toString())) {
+            if (item.get(attribute_column).equals(AttributeValue)) {
                 int i = 0;
                 for(String headername : headernames) {
                     objectMap.put(headername, item.get(i));
@@ -75,30 +79,31 @@ public class Repositorio {
     }
 
     public ArrayList<ArrayList<String>> pullAllItems() throws IOException{    
-        return driver.readItems(filePathName);
+        return driver.readItems(this.filePathName);
     }
 
     public void pushAllItems(ArrayList<ArrayList<String>> Items) throws IOException {
         // writeHeaderOnly();
-        driver.addMultipleString(Items, filePathName, headerNames);
+        driver.addMultipleString(Items, this.filePathName, this.headerNames);
     }
 
     public void addItem(Object objeto) throws FileNotFoundException {
-        driver.addObject(objeto, filePathName, headerNames);
+        driver.addObject(objeto, this.filePathName, this.headerNames);
     }
 
     public void removeItemByIndex(int targetIndex) throws IOException {
         ArrayList<ArrayList<String>> csvFileData = removeStringByIndex(pullAllItems(), targetIndex);
-        // writeHeaderOnly();
-        driver.addMultipleString(csvFileData, filePathName, headerNames);
+        eraseLines();
+        driver.addMultipleString(csvFileData, this.filePathName, this.headerNames);
     }
     
-    public int searchItemByAttributeValue(String atributo, Object value) throws IOException {
+    public int searchItemByStringValue(String atributo, String value) throws IOException {
         int column_index = this.driver.attributeColumn(atributo, this.headerNames);
         ArrayList<ArrayList<String>> items = pullAllItems();
         int target_index = 0;
         for (ArrayList<String> item : items) {
-            if (item.get(column_index).equals(value.toString())) {
+            //System.out.println(item);
+            if (item.get(column_index).equals(value)) {
                 return target_index;
             }
             target_index += 1;
@@ -106,8 +111,8 @@ public class Repositorio {
         return -1;
     }
 
-    public void removeItemByAttributeValue(String atributo, Object value) throws IOException {
-        int i = searchItemByAttributeValue(atributo, value);
+    public void removeItemByStringValue(String atributo, String value) throws IOException {
+        int i = searchItemByStringValue(atributo, value);
         if (i != -1) {
             removeItemByIndex(i);
         } else {

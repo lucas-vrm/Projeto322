@@ -1,4 +1,6 @@
 package Model;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -108,6 +110,22 @@ public class Pacote implements Reservavel {
             System.out.println("Não há assentos suficientes para a reserva.");
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        LocalDate localDate = getDataPartida().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return "Pacote{" +
+                "nome='" + nome + '\'' +
+                ", destino=" + destino +
+                ", dataPartida=" + localDate.format(formatter) +
+                ", duracao=" + duracao +
+                ", preco=" + preco +
+                ", assentosDisponiveis=" + assentosDisponiveis +
+                ", categoria=" + categoria +
+                ", atividadesDisponiveis=" + atividadesDisponiveis +
+                '}';
     }
 
     public void adicionaAtividades(String atividade) {

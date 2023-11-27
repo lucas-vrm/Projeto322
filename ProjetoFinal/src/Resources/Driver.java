@@ -2,7 +2,11 @@ package Resources;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
+
+import Model.Destino;
 
 public class Driver {
     public Driver() {
@@ -12,11 +16,12 @@ public class Driver {
         int i;
         for (i = 0; i < headerNames.length; i++) {
             if (headerNames[i].equals(headerName)) {
+                //System.out.println("Header found" + i);
                 return i;
             }
         }
 
-        System.out.println("Header " + headerName + " not found" + i);
+        System.out.println("Header " + headerName + " not found (index " + i + ")");
         System.exit(1);
         return 0;
     }
@@ -75,7 +80,18 @@ public class Driver {
 
                     String attributeName = attribute.getName();
                     String attributeType = attribute.getType().getName();
-                    if ("java.util.ArrayList".equals(attributeType) && value != null) {
+                    //System.out.println("attributeType = " + attributeType);
+                    if ("Model.Destino".equals(attributeType) && value != null) {
+                        Destino temp = (Destino) value;
+                        attributeValues[indexOfHeader(attributeName, headerNames)] = temp.getNome();
+
+                    } else if ("java.util.Date".equals(attributeType) && value != null) {
+                        Date currentDate = (Date) value;
+                        LocalDate localDate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        attributeValues[indexOfHeader(attributeName, headerNames)] = (String) localDate.format(formatter);
+
+                    } else if ("java.util.ArrayList".equals(attributeType) && value != null) {
                         attributeValues[indexOfHeader(attributeName, headerNames)] = listToSingleString(value);
                     } else {
                         attributeValues[indexOfHeader(attributeName, headerNames)] = value;
@@ -113,6 +129,12 @@ public class Driver {
             out.write(Objects.toString(csvOutput.get(i), null) + ",");
         }
         out.write(Objects.toString(csvOutput.get(headerLength - 1), null) + "\n");
+    }
+
+    void eraseLines(String pathname) throws FileNotFoundException {
+        try (PrintWriter out = new PrintWriter(new File(pathname))) {
+            out.write("");
+        }
     }
 
     public String[] getObjectHeaderNames(Object objeto) throws IllegalAccessException {

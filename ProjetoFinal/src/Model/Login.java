@@ -31,6 +31,7 @@ public class Login implements LoginMethods {
             scanner.nextLine(); // Limpar o buffer
         } catch (Exception e) {
             System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
+            scanner.nextLine(); // Limpar o buffer
             return loginScreen(scanner);
         }
 
@@ -45,10 +46,8 @@ public class Login implements LoginMethods {
             default:
                 System.out.println();
                 System.out.println("Opção inválida. Tente novamente.");
-                loginScreen(scanner);
+                return loginScreen(scanner);
         }
-        
-        return null;
     }
 
     public static Usuario fazerLogin(Scanner scanner) {
@@ -103,6 +102,7 @@ public class Login implements LoginMethods {
 
                 System.out.print("ID: ");
                 id = scanner.nextInt();
+                scanner.nextLine();
 
                 System.out.print("Senha: ");
                 senha = scanner.nextLine();

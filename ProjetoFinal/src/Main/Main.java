@@ -11,10 +11,14 @@ public class Main {
 	public static void main(String[] args) throws FileNotFoundException {
 		// Login telaDeLogin = new Login();
 		Object usuario = Login.loginScreen(scanner);
-		Administrador lucas = (Administrador) usuario;
-		lucas.adicionarPacote(scanner);
+		if (usuario != null) {
+			Administrador lucas = (Administrador) usuario;
+			//lucas.adicionarPacote(scanner);
+			//lucas.removerPacote("asdasd");
+			//Pacote pacote = lucas.getRepPacote().getPacoteByName("Pacote Rio de Janeiro para casal");
+			//System.out.println(pacote.toString());
+		}
 		//MainMethods.controleDeTelas(usuario);
-
 	}
 
 
