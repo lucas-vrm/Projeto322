@@ -37,26 +37,25 @@ public class Administrador extends Usuario {
         this.repPacote = repPacote;
     }
 
-	public void adminScreen(Administrador Administrador, Scanner scanner){
-        System.out.println("---- Janela do Cliente ----");
+	public void adminScreen(Scanner scanner){
+        System.out.println("---- Janela Admin ----");
         System.out.println();
-        System.out.println("1. Visualizar Informações");
-        System.out.println("2. Adicionar Crédito");
-        System.out.println("3. Ver saldo de Crédito");
-        System.out.println("4. Buscar pacotes de viagem");            
+        System.out.println("1. Adicionar Destino");
+        System.out.println("2. Remover Destino");
+        System.out.println("3. Adicionar Pacote");
+        System.out.println("4. Remover Pacote");            
         System.out.println("5. Sair");
         System.out.println();
         System.out.print("Escolha uma opção: ");
 
-
-        
         int opcao;
         try {
             opcao = scanner.nextInt();
+            scanner.nextLine();
         
         } catch (Exception e) {
             System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
-            adminScreen(Administrador, scanner);
+            adminScreen(scanner);
             return;
         }
 
@@ -70,7 +69,6 @@ public class Administrador extends Usuario {
                 removerDestino(nomeDestino);
                 break;
             case 3:
-                System.out.println("nome do pacote a ser adicionado");
                 adicionarPacote(scanner);
                 break;
             case 4:
@@ -79,12 +77,13 @@ public class Administrador extends Usuario {
                 removerPacote(nomePacote);
             case 5:
                 System.out.println("Saindo da plataforma");
-                break;
+                return;
             default:
                 System.out.println();
                 System.out.println("Opção inválida. Tente novamente.");
-                adminScreen(Administrador, scanner);
+            
         }
+        adminScreen(scanner);
     }
 
     public Destino criaNovoDestino(Scanner scanner) {
@@ -110,7 +109,7 @@ public class Administrador extends Usuario {
                     }
                     pontosTuristicos.add(entrada);
                 }
-                scanner.nextLine();
+                //scanner.nextLine();
                 entradaValida = true;
                 
             } catch (InputMismatchException e) {

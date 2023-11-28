@@ -26,6 +26,7 @@ public class MainMethods {
 				
                 case "Administrador":
                     Administrador admin = (Administrador) user;
+                    admin.adminScreen(scanner);
                     //System.out.println("----- Tela Admin " + admin.getNome() + " -----");
                     // Chamar tela do Admin
                     break;

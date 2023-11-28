@@ -160,6 +160,7 @@ public class UsuarioTela {
                 System.out.println("Digite o preço máximo desejado:");
                 //scanner.nextLine();
                 Double precoMaximo = scanner.nextDouble();
+                scanner.nextLine();
                 //scanner.nextLine();
                 buscarPacotePorPrecoMaximo(precoMaximo);
                 break;
@@ -167,12 +168,11 @@ public class UsuarioTela {
             case 4:
                 System.out.println();
                 userScreen(cliente, scanner);
-                break;
+                return;
 
             default:
             System.out.println("Opção inválida. Por favor, selecione uma das opções acima.");
             buscarPacote(cliente, scanner);
-            break;
         }
 
         System.out.print("Digite algo para continuar a busca por pacotes: ");

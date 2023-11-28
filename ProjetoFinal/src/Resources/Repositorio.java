@@ -67,10 +67,10 @@ public class Repositorio {
         
         for (ArrayList<String> item : items) {
 
-            System.out.println(AttributeValue);
-            System.out.println(attribute_column);
-            System.out.println(item);
-            System.out.println(item.get(attribute_column));
+            //System.out.println(AttributeValue);
+            //System.out.println(attribute_column);
+            //System.out.println(item);
+            //System.out.println(item.get(attribute_column));
             if (item.get(attribute_column).equalsIgnoreCase(AttributeValue)) {
                 int i = 0;
                 for(String headername : headernames) {
@@ -126,7 +126,6 @@ public class Repositorio {
             Map<String, String> tempObjectMap = new HashMap<>();
             int i = 0;
             for(String headername : headernames) {
-                System.out.println(item.get(i));
                 tempObjectMap.put(headername, item.get(i));
                 i++;
             }
