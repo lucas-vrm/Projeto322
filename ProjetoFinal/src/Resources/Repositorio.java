@@ -126,6 +126,7 @@ public class Repositorio {
             Map<String, String> tempObjectMap = new HashMap<>();
             int i = 0;
             for(String headername : headernames) {
+                System.out.println(item.get(i));
                 tempObjectMap.put(headername, item.get(i));
                 i++;
             }
