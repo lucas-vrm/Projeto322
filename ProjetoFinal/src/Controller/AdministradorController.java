@@ -18,6 +18,6 @@ public class AdministradorController {
 	
 	public void getUserInput() {
         int userInput = scanner.nextInt();
-        model.fazAcao(userInput);
+        //model.adminScreen(model, scanner);
     }
 }

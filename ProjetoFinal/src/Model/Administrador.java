@@ -37,20 +37,55 @@ public class Administrador extends Usuario {
         this.repPacote = repPacote;
     }
 
-	public void fazAcao(int acao) {
-		switch(acao) {
-			case 0:
-			
-			case 1:
-				//add novo pacote de viagem
-			case 2:
-				//apagar pacote de viagem
-			case 3:
-				//apagar usuario
-			default:
-				System.out.println("Algo errado");
-		}
-	}
+	public void adminScreen(Administrador Administrador, Scanner scanner){
+        System.out.println("---- Janela do Cliente ----");
+        System.out.println();
+        System.out.println("1. Visualizar Informações");
+        System.out.println("2. Adicionar Crédito");
+        System.out.println("3. Ver saldo de Crédito");
+        System.out.println("4. Buscar pacotes de viagem");            
+        System.out.println("5. Sair");
+        System.out.println();
+        System.out.print("Escolha uma opção: ");
+
+
+        
+        int opcao;
+        try {
+            opcao = scanner.nextInt();
+        
+        } catch (Exception e) {
+            System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
+            adminScreen(Administrador, scanner);
+            return;
+        }
+
+        switch (opcao) {
+            case 1:
+                adicionarDestino(scanner);
+                break;
+            case 2:
+                System.out.println("nome do destino a ser removido:");
+                String nomeDestino = scanner.nextLine();
+                removerDestino(nomeDestino);
+                break;
+            case 3:
+                System.out.println("nome do pacote a ser adicionado");
+                adicionarPacote(scanner);
+                break;
+            case 4:
+                System.out.println("nome do pacote a ser removido:");
+                String nomePacote = scanner.nextLine();
+                removerPacote(nomePacote);
+            case 5:
+                System.out.println("Saindo da plataforma");
+                break;
+            default:
+                System.out.println();
+                System.out.println("Opção inválida. Tente novamente.");
+                adminScreen(Administrador, scanner);
+        }
+    }
 
     public Destino criaNovoDestino(Scanner scanner) {
         boolean entradaValida = false;
