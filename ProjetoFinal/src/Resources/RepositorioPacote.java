@@ -61,6 +61,7 @@ public class RepositorioPacote extends Repositorio {
 
         pacotesMaps = getAllObjectsMap();
         for(Map<String, String> pacote : pacotesMaps) {
+            if ()
             Pacote tempPacote = criarPacoteComMap(pacote);
             pacotesObjetos.add(tempPacote);
         }

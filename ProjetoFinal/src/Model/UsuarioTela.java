@@ -3,59 +3,62 @@ package Model;
 import java.util.Scanner;
 
 import Resources.RepositorioPacote;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class UsuarioTela {
-    public void userScreen(Cliente cliente){
-        try(Scanner scanner = new Scanner(System.in)){
-            System.out.println("---- Janela do Cliente ----");
-            System.out.println();
-            System.out.println("1. Visualizar Informações");
-            System.out.println("2. Adicionar Crédito");
-            System.out.println("3. Ver saldo de Crédito");
-            System.out.println("4. Buscar pacotes de viagem");            
-            System.out.println("5. Sair");
-            System.out.println();
-            System.out.print("Escolha uma opção: ");
+    RepositorioPacote repPacote = new RepositorioPacote();
+    public UsuarioTela() {
+    }
+
+    public void userScreen(Cliente cliente, Scanner scanner){
+        System.out.println("---- Janela do Cliente ----");
+        System.out.println();
+        System.out.println("1. Visualizar Informações");
+        System.out.println("2. Adicionar Crédito");
+        System.out.println("3. Ver saldo de Crédito");
+        System.out.println("4. Buscar pacotes de viagem");            
+        System.out.println("5. Sair");
+        System.out.println();
+        System.out.print("Escolha uma opção: ");
 
 
-            scanner.nextLine(); // Limpar o buffer
-            int opcao;
-            try {
-                opcao = scanner.nextInt();
-                scanner.nextLine(); // Limpar o buffer
-            } catch (Exception e) {
-                System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
-                scanner.close();
-                userScreen(cliente);
-                return;
-            }
+        //scanner.nextLine(); // Limpar o buffer
+        int opcao;
+        try {
+            opcao = scanner.nextInt();
+            //scanner.nextLine(); // Limpar o buffer
+        } catch (Exception e) {
+            System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
+            userScreen(cliente, scanner);
+            return;
+        }
 
-            switch (opcao) {
-                case 1:
-                    mostrarInfo(cliente);
-                    break;
-                case 2:
-                    addCredito(cliente);
-                    break;
-                case 3:
-                    mostrarCredito(cliente);
-                    break;
-                case 4:
-                    buscarPacote(cliente);
-                case 5:
-                    System.out.println("Saindo da plataforma");
-                    break;
-                default:
-                    System.out.println();
-                    System.out.println("Opção inválida. Tente novamente.");
-                    userScreen(cliente);
-            }
+        switch (opcao) {
+            case 1:
+                mostrarInfo(cliente, scanner);
+                break;
+            case 2:
+                addCredito(cliente, scanner);
+                break;
+            case 3:
+                mostrarCredito(cliente, scanner);
+                break;
+            case 4:
+                buscarPacote(cliente, scanner);
+            case 5:
+                System.out.println("Saindo da plataforma");
+                break;
+            default:
+                System.out.println();
+                System.out.println("Opção inválida. Tente novamente.");
+                userScreen(cliente, scanner);
         }
     }
     
-    public static void mostrarInfo(Cliente cliente) {
+    public void mostrarInfo(Cliente cliente, Scanner scanner) {
         System.out.println();
         System.out.println();
         System.out.println("=== Informações de Usuário ===");
@@ -72,86 +75,112 @@ public class UsuarioTela {
 
         System.out.printf("ID: %d", cliente.getId());
         System.out.println();
+        
+
+        scanner.nextLine();
+        System.out.print("Digite algo para retornar: ");
+        scanner.nextLine();
+        userScreen(cliente, scanner);
 
     }
 
-    public static void addCredito(Cliente cliente) {
-        Scanner entrada = new Scanner(System.in);
+    public void addCredito(Cliente cliente, Scanner scanner) {
         try {
             System.out.println("Digite o valor que você deseja adicionar:");
-            double valor = entrada.nextDouble();
+            double valor = scanner.nextDouble();
             double creditoAntigo = cliente.getCreditos();
             cliente.setCreditos(creditoAntigo + valor);
-            entrada.nextLine(); // Limpar o buffer
+            scanner.nextLine(); // Limpar o buffer
             System.out.println("Crédito adicionado com sucesso!!!");
         } catch (Exception e) {
             System.out.println("Erro: Certifique-se de inserir um valor de crédito válido.");
-            entrada.close();
-            addCredito(cliente);
+            addCredito(cliente, scanner);
             return;
         }
-        entrada.close();
+
+        System.out.print("Digite algo para retornar: ");
+        scanner.nextLine();
+        userScreen(cliente, scanner);
     }
-    public static void mostrarCredito(Cliente cliente) {
+
+    public void mostrarCredito(Cliente cliente, Scanner scanner) {
         System.out.println();
         System.out.println();
         System.out.println("=== Créditos do Cliente ===");
         System.out.println();
         System.out.println("Saldo de Créditos atual: " + cliente.getCreditos());
         System.out.println();
+
+        scanner.nextLine();
+        System.out.print("Digite algo para retornar: ");
+        scanner.nextLine();
+        userScreen(cliente, scanner);
     }
 
-    public void buscarPacote(Cliente cliente){
-        try(Scanner scanner = new Scanner(System.in)){
-            System.out.println("---- Busca por Pacote ----");
-            System.out.println("Qual filtro para busca você gostaria de utilizar?");
-            System.out.println("1. Buscar por Destino");
-            System.out.println("2. Buscar por Categoria");
-            System.out.println("3. Buscar por preço máximo");
+    public void buscarPacote(Cliente cliente, Scanner scanner){
+        System.out.println("---- Busca por Pacote ----");
+        System.out.println("Qual filtro para busca você gostaria de utilizar?");
+        System.out.println("1. Buscar por Destino");
+        System.out.println("2. Buscar por Categoria");
+        System.out.println("3. Buscar por preço máximo");
+        System.out.println("4. Retornar");
 
+        //scanner.nextLine(); // Limpar o buffer
+        int opcao;
+        try {
+            opcao = scanner.nextInt();
             scanner.nextLine(); // Limpar o buffer
-            int opcao;
-            try {
-                opcao = scanner.nextInt();
-                scanner.nextLine(); // Limpar o buffer
-            } catch (Exception e) {
-                System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
-                scanner.close();
-                userScreen(cliente);
-                return;
-            }
+        } catch (Exception e) {
+            System.out.println("Erro: Opção inválida. Certifique-se de inserir um número válido.");
+            userScreen(cliente, scanner);
+            return;
+        }
 
-            switch(opcao){
-                case 1:
+        switch(opcao){
+            case 1:
                 System.out.println("Digite o destino desejado:");
-                scanner.nextLine(); // Limpar o buffer do teclado
+                //scanner.nextLine(); // Limpar o buffer do teclado
                 String destinoDesejado = scanner.nextLine();
                 buscarPacotePorDestino(destinoDesejado);
                 break;
 
-                case 2:
+            case 2:
                 System.out.println("Digite a categoria desejada:");
-                scanner.nextLine(); // Limpar o buffer do teclado
+                System.out.println(CategoriaDeDestino.getCategorias());
+                //scanner.nextLine(); // Limpar o buffer do teclado
                 String categoriaDesejada = scanner.nextLine();
-                buscarPacotePorCategoria(categoriaDesejada);
+                if (CategoriaDeDestino.isCategoriaValida(categoriaDesejada)) {
+                    buscarPacotePorCategoria(categoriaDesejada.toUpperCase());
+                } else {
+                    System.out.println("Opção inválida. Por favor, selecione uma das opções acima.");
+                }
                 break;
 
-                case 3:
+            case 3:
                 System.out.println("Digite o preço máximo desejado:");
-                scanner.nextLine();
+                //scanner.nextLine();
                 Double precoMaximo = scanner.nextDouble();
+                //scanner.nextLine();
                 buscarPacotePorPrecoMaximo(precoMaximo);
                 break;
 
-                default:
-                System.out.println("Opção inválida. Por favor, selecione uma das opções acima.");
+            case 4:
+                System.out.println();
+                userScreen(cliente, scanner);
                 break;
-            }
+
+            default:
+            System.out.println("Opção inválida. Por favor, selecione uma das opções acima.");
+            buscarPacote(cliente, scanner);
+            break;
         }
+
+        System.out.print("Digite algo para continuar a busca por pacotes: ");
+        scanner.nextLine();
+        buscarPacote(cliente, scanner);
     }
 
-     public void buscarPacotePorDestino(String destinoDesejado){
-        RepositorioPacote repPacote = new RepositorioPacote();
+    public void buscarPacotePorDestino(String destinoDesejado){
         
         ArrayList<Pacote> pacotesEncontrados = new ArrayList<>();
         pacotesEncontrados = repPacote.getAllPacotesFromSameAttribute("destino", destinoDesejado);
@@ -162,7 +191,11 @@ public class UsuarioTela {
             System.out.println("=== PACOTES ENCONTRADOS COM O DESTINO " + destinoDesejado + " ====");
             for (Pacote pacote : pacotesEncontrados){
                 String nome = pacote.getNome();
-                Date dataPartida = pacote.getDataPartida();
+
+                LocalDate localDate = pacote.getDataPartida().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String dataPartida = localDate.format(formatter);
+
                 int duracao = pacote.getDuracao();
                 double preco = pacote.getPreco();
                 int assentosDisponiveis = pacote.getAssentosDisponiveis();
@@ -181,9 +214,7 @@ public class UsuarioTela {
         }
     }
 
-    public void buscarPacotePorCategoria(String categoriaDesejada){
-        RepositorioPacote repPacote = new RepositorioPacote();
-        
+    public void buscarPacotePorCategoria(String categoriaDesejada){  
         ArrayList<Pacote> pacotesEncontrados = new ArrayList<>();
         pacotesEncontrados = repPacote.getAllPacotesFromSameAttribute("categoria", categoriaDesejada);
         
@@ -194,7 +225,11 @@ public class UsuarioTela {
             for (Pacote pacote : pacotesEncontrados){
                 String nome = pacote.getNome();
                 Destino destino = pacote.getDestino();
-                Date dataPartida = pacote.getDataPartida();
+
+                LocalDate localDate = pacote.getDataPartida().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String dataPartida = localDate.format(formatter);
+
                 int duracao = pacote.getDuracao();
                 double preco = pacote.getPreco();
                 int assentosDisponiveis = pacote.getAssentosDisponiveis();
@@ -213,7 +248,6 @@ public class UsuarioTela {
     }
 
     public void buscarPacotePorPrecoMaximo(double precoMaximo){
-        RepositorioPacote repPacote = new RepositorioPacote();
 
         ArrayList<Pacote> pacotesEncontrados = new ArrayList<>();
         pacotesEncontrados = repPacote.getAllPacotes();
@@ -224,7 +258,11 @@ public class UsuarioTela {
             if (pacote.getPreco() <= precoMaximo){
                 String nome = pacote.getNome();
                 Destino destino = pacote.getDestino();
-                Date dataPartida = pacote.getDataPartida();
+
+                LocalDate localDate = pacote.getDataPartida().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String dataPartida = localDate.format(formatter);
+
                 int duracao = pacote.getDuracao();
                 int assentosDisponiveis = pacote.getAssentosDisponiveis();
                 CategoriaDeDestino categoria = pacote.getCategoria();

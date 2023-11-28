@@ -1,5 +1,7 @@
 package Main;
 
+import java.util.Scanner;
+
 import Model.Administrador;
 import Model.Cliente;
 import Model.UsuarioTela;
@@ -10,25 +12,26 @@ public class MainMethods {
         return classeUsuario.substring(classeUsuario.lastIndexOf(".") + 1);
     }
 
-    public static void controleDeTelas(Object user) {
+    public static void controleDeTelas(Object user, Scanner scanner) {
         if (user != null) {
 			String tipoDeUsuario = MainMethods.identificarTipoUsuario(user);
 			switch (tipoDeUsuario) {
 				case "Cliente":
 					Cliente cliente = (Cliente) user;
-					System.out.println("---- Tela Cliente " + cliente.getNome() + " ----");
+					//System.out.println("---- Tela Cliente " + cliente.getNome() + " ----");
 					// Chamar tela do Cliente
-                    //UsuarioTela.userScreen(cliente);
+                    UsuarioTela telaDoUsuario = new UsuarioTela();
+                    telaDoUsuario.userScreen(cliente, scanner);
                     break;
 				
                 case "Administrador":
                     Administrador admin = (Administrador) user;
-                    System.out.println("----- Tela Admin " + admin.getNome() + " -----");
+                    //System.out.println("----- Tela Admin " + admin.getNome() + " -----");
                     // Chamar tela do Admin
                     break;
             
                 default:
-                    //return;
+                    return;
 			}
 		}
     }
